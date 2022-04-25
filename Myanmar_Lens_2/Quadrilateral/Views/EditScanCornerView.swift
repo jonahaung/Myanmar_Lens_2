@@ -32,7 +32,7 @@ final class EditScanCornerView: UIView {
     
     private let circleLayer: CAShapeLayer = {
         $0.lineWidth = 0
-        $0.opacity = 0.7
+        $0.opacity = 1
         return $0
     }(CAShapeLayer())
     

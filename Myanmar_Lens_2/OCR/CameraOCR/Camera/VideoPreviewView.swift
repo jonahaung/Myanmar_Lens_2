@@ -29,17 +29,19 @@ class VideoPreviewView: UIView {
     private var previousPanPosition: CGPoint?
     private var closestCorner: CornerPosition?
     private var textQuads = [TextQuad]()
-    private var stableTexts = Set<String>()
     private let stringTracker = StringTracker()
     private var regionOfInterestTransform = CGAffineTransform.identity
-    
+    private var textRecognizerActive = false
     private let translateOperationGroup = TranslateOperationGroup()
+    private var videoGravity: AVLayerVideoGravity = .resizeAspect
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .black
         quadView.frame = bounds
         addSubview(quadView)
         setupGestureRecognizer()
+        videoGravity = previewLayer.videoGravity
     }
     
     required init?(coder: NSCoder) {
@@ -48,7 +50,7 @@ class VideoPreviewView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let layerRect = previewLayer.layerRectConverted(fromMetadataOutputRect: .init(x: 0, y: 0, width: 1, height: 1)).intersection(bounds)
+        let layerRect = previewLayer.layerRectConverted(fromMetadataOutputRect: .init(x: 0, y: 0, width: 1, height: 1))
         let layerRectScaleTransform = CGAffineTransform(scaleX: layerRect.width, y: -layerRect.height)
         let layerRectTranslateTransform = CGAffineTransform(translationX: layerRect.minX, y: layerRect.maxY)
         regionOfInterestTransform = layerRectScaleTransform.concatenating(layerRectTranslateTransform)
@@ -65,7 +67,7 @@ extension VideoPreviewView: UIGestureRecognizerDelegate {
             return super.gestureRecognizerShouldBegin(gestureRecognizer)
         }
         let location = gestureRecognizer.location(in: self)
-        return quadView.getQuadFrame().intersects(location.surroundingSquare(withSize: CGSize(width: 100, height: 100)))
+        return textRecognizerActive && quadView.getQuadFrame().intersects(location.surroundingSquare(withSize: CGSize(width: 100, height: 100)))
     }
     private func setupGestureRecognizer() {
         let panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handlePan(_:)))
@@ -104,11 +106,18 @@ extension VideoPreviewView: UIGestureRecognizerDelegate {
     func clearTexts() {
         textQuads.forEach{ $0.remove() }
         textQuads.removeAll()
-        stableTexts.removeAll()
         resetStable()
     }
     private func resetStable() {
         stringTracker.reset()
+    }
+    
+    func setActive(isActive: Bool) {
+        textRecognizerActive = isActive
+        clearTexts()
+        previewLayer.videoGravity = isActive ? .resizeAspectFill : videoGravity
+        quadView.setActive(isActive: isActive)
+        setNeedsLayout()
     }
 }
 
@@ -133,13 +142,8 @@ extension VideoPreviewView {
         stringTracker.logFrame(strings: texts)
         if let stable = stringTracker.getStableString() {
             stringTracker.reset(string: stable)
-            stableTexts.insert(stable)
             translateOperationGroup.addIfNeeded(string: stable)
         }
-        let stables = textQuads.filter { quad in
-            return stableTexts.contains(quad.string)
-        }
-        stables.forEach{ $0.setStable() }
     }
 }
 

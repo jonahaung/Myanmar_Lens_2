@@ -20,7 +20,7 @@ final class QuadrilateralView: UIView {
     
     private let quadLineLayer: CAShapeLayer = {
         $0.fillColor = nil
-        $0.lineWidth = 3
+        $0.lineWidth = 0
         $0.strokeColor = UIColor.systemYellow.cgColor
         return $0
     }(CAShapeLayer())
@@ -74,7 +74,7 @@ final class QuadrilateralView: UIView {
         
         quadLineLayer.frame = bounds
         if quadLineLayer.path == nil {
-            let rect = CGRect(x: 20, y: bounds.height/2 - 30, width: bounds.width - 40, height: 60)
+            let rect = bounds
             drawQuadrilateral(quad: .init(rect))
         }
         quadLayer.frame = viewQuad.regionRect
@@ -82,6 +82,17 @@ final class QuadrilateralView: UIView {
 
     func getQuadFrame() -> CGRect {
         viewQuad.regionRect
+    }
+    
+    func setActive(isActive: Bool) {
+        quadLineLayer.lineWidth = isActive ? 3 : 0
+        let rect = isActive ? CGRect(x: 10, y: bounds.height/2 - 100, width: bounds.width - 20, height: 150) : bounds.insetBy(dx: 5, dy: 5)
+        let quad = Quadrilateral(rect)
+        drawQuadrilateral(quad: quad)
+        let pathAnimation = CABasicAnimation(keyPath: "path")
+        pathAnimation.duration = 0.4
+        quadLineLayer.add(pathAnimation, forKey: "path")
+        quadLayer.frame = viewQuad.regionRect
     }
 }
 
@@ -106,12 +117,6 @@ extension QuadrilateralView {
         let rectPath = UIBezierPath(rect: bounds)
         rectPath.usesEvenOddFillRule = true
         path.append(rectPath)
-        
-        if animated == true {
-            let pathAnimation = CABasicAnimation(keyPath: "path")
-            pathAnimation.duration = 0.2
-            quadLayer.add(pathAnimation, forKey: "path")
-        }
     }
 }
 

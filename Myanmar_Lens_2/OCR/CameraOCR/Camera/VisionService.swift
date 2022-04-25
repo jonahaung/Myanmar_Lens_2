@@ -27,8 +27,10 @@ class VisionService: NSObject {
         print("VideoOutputService")
     }
     
-    func toggle() {
-        self.canRecognizeText.toggle()
+    func toggle() -> Bool {
+        canRecognizeText.toggle()
+        view?.setActive(isActive: canRecognizeText)
+        return canRecognizeText
     }
 }
 

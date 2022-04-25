@@ -18,6 +18,7 @@ final class CameraViewModel: ObservableObject {
     @Published var showAlertError = false
     @Published var isFlashOn = false
     @Published var willCapturePhoto = false
+    @Published var textRecognizerActive = false
     
     var alertError: AlertError!
     
@@ -57,10 +58,15 @@ final class CameraViewModel: ObservableObject {
     }
     
     func capturePhoto() {
-        if session.isRunning {
-            service.stop()
-        } else {
-            service.start()
+        
+        if textRecognizerActive {
+            if session.isRunning {
+                service.stop()
+            } else {
+                service.start()
+            }
+        }else {
+            service.capturePhoto()
         }
     }
     
@@ -76,7 +82,7 @@ final class CameraViewModel: ObservableObject {
         service.flashMode = service.flashMode == .on ? .off : .on
     }
     func toggleTextRecognizer() {
-        visionService.toggle()
+        textRecognizerActive = visionService.toggle()
     }
 }
 

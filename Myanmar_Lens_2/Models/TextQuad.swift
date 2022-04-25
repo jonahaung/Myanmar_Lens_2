@@ -33,15 +33,11 @@ struct TextQuad {
     }
     
     func displayShapeLayer(in layer: CALayer) {
-        if shapeLayer.superlayer == nil {
-            layer.addSublayer(shapeLayer)
-        }
+        layer.addSublayer(shapeLayer)
     }
     
     func displayTextLayer(in layer: CALayer) {
-        if textLayer.superlayer == nil {
-            layer.addSublayer(textLayer)
-        }
+        layer.addSublayer(textLayer)
     }
     
     func remove() {
@@ -50,6 +46,6 @@ struct TextQuad {
     }
     
     func setStable() {
-        shapeLayer.fillColor = UIColor.black.cgColor
+//        shapeLayer.fillColor = UIColor.black.cgColor
     }
 }

@@ -24,7 +24,7 @@ struct ContentView: View {
             Button("Reset") {
                 Translate.deleteAll()
             }
-            XIcon(.camera_viewfinder)
+            XIcon(.camera_fill)
                 .tapToPresent(CameraView(), .FullScreen)
         }
     }

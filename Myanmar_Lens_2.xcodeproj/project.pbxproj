@@ -48,6 +48,7 @@
 		474783082816731F00B3B6C4 /* +Translate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783072816731F00B3B6C4 /* +Translate.swift */; };
 		4747830A2816790200B3B6C4 /* TranslateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783092816790100B3B6C4 /* TranslateOperation.swift */; };
 		4747830C28167A6A00B3B6C4 /* TranslateOperationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */; };
+		4747830E2816A05100B3B6C4 /* OCRImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747830D2816A05100B3B6C4 /* OCRImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +94,7 @@
 		474783072816731F00B3B6C4 /* +Translate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+Translate.swift"; sourceTree = "<group>"; };
 		474783092816790100B3B6C4 /* TranslateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateOperation.swift; sourceTree = "<group>"; };
 		4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateOperationGroup.swift; sourceTree = "<group>"; };
+		4747830D2816A05100B3B6C4 /* OCRImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +276,7 @@
 		474782DC28163CFA00B3B6C4 /* ImageOCR */ = {
 			isa = PBXGroup;
 			children = (
+				4747830D2816A05100B3B6C4 /* OCRImageView.swift */,
 			);
 			path = ImageOCR;
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 				474783082816731F00B3B6C4 /* +Translate.swift in Sources */,
 				47478302281643C800B3B6C4 /* CameraService.swift in Sources */,
 				474782E728163DD400B3B6C4 /* Size.swift in Sources */,
+				4747830E2816A05100B3B6C4 /* OCRImageView.swift in Sources */,
 				474782FA281643C800B3B6C4 /* CameraViewModel.swift in Sources */,
 				4747830A2816790200B3B6C4 /* TranslateOperation.swift in Sources */,
 				474782C428163BB400B3B6C4 /* TextQuad.swift in Sources */,

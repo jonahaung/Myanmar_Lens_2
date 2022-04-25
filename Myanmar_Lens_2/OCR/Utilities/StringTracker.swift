@@ -17,7 +17,8 @@ class StringTracker {
     var seenStrings = [String: StringObservation]()
     var bestCount = Int64(0)
     var bestString = ""
-
+    var limit = 30
+    
     func logFrame(strings: [String]) {
         for string in strings {
             if seenStrings[string] == nil {
@@ -33,7 +34,7 @@ class StringTracker {
         // Also find the (non-pruned) string with the greatest count.
         for (string, obs) in seenStrings {
             // Remove previously seen text after 30 frames (~1s).
-            if obs.lastSeen < frameIndex - 30 {
+            if obs.lastSeen < frameIndex - 100 {
                 obsoleteStrings.append(string)
             }
             
@@ -54,7 +55,7 @@ class StringTracker {
     
     func getStableString() -> String? {
         // Require the recognizer to see the same string at least 10 times.
-        if bestCount >= 10 {
+        if bestCount >= limit {
             return bestString
         } else {
             return nil
