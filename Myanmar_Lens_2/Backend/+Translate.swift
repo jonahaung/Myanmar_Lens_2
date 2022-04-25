@@ -70,4 +70,14 @@ extension Translate {
         }
         PersistenceController.shared.save()
     }
+    
+    static func all() -> [Translate] {
+        let context = PersistenceController.shared.viewContext
+        let request: NSFetchRequest<Translate> = Translate.fetchRequest()
+        do {
+            return try context.fetch(request)
+        } catch {
+            fatalError()
+        }
+    }
 }

@@ -21,7 +21,7 @@ final class TranslateOperation: Operation {
         if !string.isWhitespace && Translate.find(string: string) == nil {
             Translator.shared.translate(text: string, from: .english, to: .burmese) { to in
                 if self.isCancelled { return }
-                if let to = to?.trimmed, !to.isWhitespace {
+                if let to = to {
                     Translate.createIfNeeded(from: self.string, to: to)
                 }
             }

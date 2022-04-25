@@ -14,7 +14,7 @@ class VisionService: NSObject {
     weak var view: VideoPreviewView?
     private var textRequest: VNRecognizeTextRequest!
     private var canRecognizeText = false
-    let semaphore = DispatchSemaphore(value: 3)
+    private let semaphore = DispatchSemaphore(value: 1)
     
     override init() {
         super.init()
