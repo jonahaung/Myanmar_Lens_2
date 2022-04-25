@@ -119,6 +119,30 @@ extension VideoPreviewView: UIGestureRecognizerDelegate {
         quadView.setActive(isActive: isActive)
         setNeedsLayout()
     }
+    
+    func translate() {
+        let group = DispatchGroup()
+        var new = [TextQuad]()
+        self.textQuads.forEach { each in
+            group.enter()
+            if let translated = Translate.find(string: each.string) {
+                new.append(.init(quad: each.quad, string: translated))
+                group.leave()
+            } else {
+                Translator.shared.translate(text: each.string, from: .english, to: .burmese) { translated in
+                    if let translated = translated {
+                        new.append(.init(quad: each.quad, string: translated))
+                    }
+                    group.leave()
+                }
+            }
+        }
+        group.notify(queue: .main) {
+            self.clearTexts()
+            self.textQuads = new
+            self.quadView.display(textQuads: new)
+        }
+    }
 }
 
 extension VideoPreviewView {

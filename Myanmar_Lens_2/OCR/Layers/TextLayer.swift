@@ -22,7 +22,7 @@ class TextLayer: CATextLayer {
         self.contentsScale = UIScreen.main.scale
         self.alignmentMode = .justified
         self.isWrapped = true
-        self.backgroundColor = UIColor(white: 0.2, alpha: 0.7).cgColor
+        self.backgroundColor = UIColor(white: 0.3, alpha: 0.5).cgColor
         self.frame.size = textSize
         let xScale = (rect.width/textSize.width)
         let yScale =  (rect.height/textSize.height)

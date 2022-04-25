@@ -61,6 +61,7 @@ final class CameraViewModel: ObservableObject {
         
         if textRecognizerActive {
             if session.isRunning {
+                visionService.view?.translate()
                 service.stop()
             } else {
                 service.start()

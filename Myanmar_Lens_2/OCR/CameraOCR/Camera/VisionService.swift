@@ -40,7 +40,7 @@ extension VisionService {
         guard let results = request.results as? [VNRecognizedTextObservation] else { return }
         DispatchQueue.main.async {
             if self.canRecognizeText {
-                self.view?.displayTextBoxes(textObservations: results)
+                self.view?.displayTextBoxes(textObservations: results.filter{ $0.confidence > 0.4})
             } else {
                 self.view?.clearTexts()
             }

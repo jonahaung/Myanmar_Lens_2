@@ -17,7 +17,7 @@ class StringTracker {
     var seenStrings = [String: StringObservation]()
     var bestCount = Int64(0)
     var bestString = ""
-    var limit = 30
+    var limit = 20
     
     func logFrame(strings: [String]) {
         for string in strings {
