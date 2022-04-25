@@ -2,9 +2,11 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Translate" representedClassName="Translate" syncable="YES" codeGenerationType="class">
         <attribute name="from" attributeType="String"/>
+        <attribute name="fromLanguage" attributeType="String"/>
         <attribute name="to" optional="YES" attributeType="String"/>
+        <attribute name="toLanguage" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Translate" positionX="-63" positionY="-18" width="128" height="14"/>
+        <element name="Translate" positionX="-63" positionY="-18" width="128" height="89"/>
     </elements>
 </model>

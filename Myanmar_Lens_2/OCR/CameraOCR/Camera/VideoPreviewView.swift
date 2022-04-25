@@ -125,7 +125,7 @@ extension VideoPreviewView: UIGestureRecognizerDelegate {
         var new = [TextQuad]()
         self.textQuads.forEach { each in
             group.enter()
-            if let translated = Translate.find(string: each.string) {
+            if let translated = Translate.find(from: each.string, toLanguage: .burmese) {
                 new.append(.init(quad: each.quad, string: translated))
                 group.leave()
             } else {
@@ -166,7 +166,7 @@ extension VideoPreviewView {
         stringTracker.logFrame(strings: texts)
         if let stable = stringTracker.getStableString() {
             stringTracker.reset(string: stable)
-            translateOperationGroup.addIfNeeded(string: stable)
+            translateOperationGroup.addIfNeeded(stable.lowercased().trimmed, fromLanguage: .english, toLanguage: .burmese)
         }
     }
 }

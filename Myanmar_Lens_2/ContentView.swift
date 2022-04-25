@@ -15,24 +15,19 @@ struct ContentView: View {
         NavigationView {
             List{
                 ForEach(items) { translate in
-                    VStack {
-                        Text(translate.from?.capitalized ?? "")
-                            .font(.system(size: 17, weight: .semibold, design: .rounded))
-                        +
-                        Text("\n")
-                        +
-                        Text(translate.to ?? "")
-                            .font(Font.custom(XFont.MyanmarFont.MyanmarSansPro.rawValue, size: 17))
-                            .foregroundColor(.secondary)
-                    }
+                    TranslateCell(translate: translate)
                 }
             }
             .navigationTitle("Myanamr Lens")
             .navigationBarItems(trailing: navBarTrailing())
+            .refreshable {
+                items = Translate.all()
+            }
             .task {
                 items = Translate.all()
             }
         }
+        .navigationViewStyle(.stack)
     }
     
     func navBarTrailing() -> some View {

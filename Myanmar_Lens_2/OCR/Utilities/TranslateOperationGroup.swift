@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NaturalLanguage
 
 final class TranslateOperationGroup {
     
@@ -17,10 +18,10 @@ final class TranslateOperationGroup {
     
     private var operations = [String: TranslateOperation]()
     
-    func addIfNeeded(string: String) {
+    func addIfNeeded(_ string: String, fromLanguage: NLLanguage, toLanguage: NLLanguage) {
         let string = string.lowercased().trimmed
         if operations[string] == nil {
-            let op = TranslateOperation(string)
+            let op = TranslateOperation(string, fromLanguage: fromLanguage, toLanguage: toLanguage)
             queue.addOperation(op)
             operations[string] = op
         }

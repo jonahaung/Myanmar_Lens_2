@@ -21,7 +21,7 @@ struct TextQuad {
         shapeLayer = ShapeLayer(quad: quad)
         string = observation.string
         let fittedRect = CGRect(origin: quad.topLeft, size: CGSize(width: quad.topRight.x - quad.topLeft.x, height: quad.topLeft.y - quad.bottomLeft.y))
-        textLayer = TextLayer(string: Translate.displayText(string: string), rect: fittedRect)
+        textLayer = TextLayer(string: Translate.displayText(string: string, toLanguage: .burmese), rect: fittedRect)
     }
     
     init(quad: Quadrilateral, string: String) {

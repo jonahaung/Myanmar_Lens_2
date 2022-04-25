@@ -49,6 +49,7 @@
 		4747830A2816790200B3B6C4 /* TranslateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783092816790100B3B6C4 /* TranslateOperation.swift */; };
 		4747830C28167A6A00B3B6C4 /* TranslateOperationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */; };
 		4747830E2816A05100B3B6C4 /* OCRImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747830D2816A05100B3B6C4 /* OCRImageView.swift */; };
+		474783122816F3BB00B3B6C4 /* TranslateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783112816F3BB00B3B6C4 /* TranslateCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +96,7 @@
 		474783092816790100B3B6C4 /* TranslateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateOperation.swift; sourceTree = "<group>"; };
 		4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateOperationGroup.swift; sourceTree = "<group>"; };
 		4747830D2816A05100B3B6C4 /* OCRImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRImageView.swift; sourceTree = "<group>"; };
+		474783112816F3BB00B3B6C4 /* TranslateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +132,7 @@
 			children = (
 				474782AD281637CC00B3B6C4 /* Myanmar-Lens-2-Info.plist */,
 				474782942816365F00B3B6C4 /* ContentView.swift */,
-				474782DD28163D6900B3B6C4 /* Views */,
+				474783112816F3BB00B3B6C4 /* TranslateCell.swift */,
 				474782DB28163CB800B3B6C4 /* OCR */,
 				474782C828163BFF00B3B6C4 /* Quadrilateral */,
 				474782C228163BAA00B3B6C4 /* Models */,
@@ -183,6 +185,7 @@
 			children = (
 				474782AF281637F300B3B6C4 /* XFont.swift */,
 				474782B12816382D00B3B6C4 /* XIcon.swift */,
+				474782F5281643C800B3B6C4 /* AlertError.swift */,
 				474782E928163E1600B3B6C4 /* Views */,
 				474782B32816385600B3B6C4 /* Extensions */,
 			);
@@ -225,8 +228,9 @@
 		474782C528163BC800B3B6C4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				474782C628163BD600B3B6C4 /* StringTracker.swift */,
+				4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */,
 				474783092816790100B3B6C4 /* TranslateOperation.swift */,
+				474782C628163BD600B3B6C4 /* StringTracker.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -281,13 +285,6 @@
 			path = ImageOCR;
 			sourceTree = "<group>";
 		};
-		474782DD28163D6900B3B6C4 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		474782E028163DD400B3B6C4 /* ViewModifiers */ = {
 			isa = PBXGroup;
 			children = (
@@ -312,18 +309,32 @@
 			isa = PBXGroup;
 			children = (
 				474782F6281643C800B3B6C4 /* CameraView.swift */,
-				474782EF281643C800B3B6C4 /* CameraService+Extensions.swift */,
-				474782F0281643C800B3B6C4 /* CameraViewModel.swift */,
 				474782F1281643C800B3B6C4 /* CameraPreview.swift */,
-				474782F2281643C800B3B6C4 /* CameraService+Enums.swift */,
-				474782F3281643C800B3B6C4 /* PhotoCaptureProcessor.swift */,
-				474782F5281643C800B3B6C4 /* AlertError.swift */,
-				474782F8281643C800B3B6C4 /* CameraService.swift */,
+				474782F0281643C800B3B6C4 /* CameraViewModel.swift */,
 				47478305281652FA00B3B6C4 /* VideoPreviewView.swift */,
-				4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */,
-				4747830328164B1400B3B6C4 /* VisionService.swift */,
+				4747830F2816E9D700B3B6C4 /* CameraService */,
+				474783102816EA0B00B3B6C4 /* VisionService */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		4747830F2816E9D700B3B6C4 /* CameraService */ = {
+			isa = PBXGroup;
+			children = (
+				474782F8281643C800B3B6C4 /* CameraService.swift */,
+				474782EF281643C800B3B6C4 /* CameraService+Extensions.swift */,
+				474782F2281643C800B3B6C4 /* CameraService+Enums.swift */,
+				474782F3281643C800B3B6C4 /* PhotoCaptureProcessor.swift */,
+			);
+			path = CameraService;
+			sourceTree = "<group>";
+		};
+		474783102816EA0B00B3B6C4 /* VisionService */ = {
+			isa = PBXGroup;
+			children = (
+				4747830328164B1400B3B6C4 /* VisionService.swift */,
+			);
+			path = VisionService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -409,6 +420,7 @@
 				474782D828163C6C00B3B6C4 /* UIImage+Utils.swift in Sources */,
 				474782EB28163E1F00B3B6C4 /* PickerNavigationView.swift in Sources */,
 				474782B52816386200B3B6C4 /* +String.swift in Sources */,
+				474783122816F3BB00B3B6C4 /* TranslateCell.swift in Sources */,
 				474782952816365F00B3B6C4 /* ContentView.swift in Sources */,
 				47478300281643C800B3B6C4 /* CameraView.swift in Sources */,
 				474782DA28163C6C00B3B6C4 /* CGAffineTransform+Utils.swift in Sources */,
