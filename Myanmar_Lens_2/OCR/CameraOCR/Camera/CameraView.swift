@@ -74,7 +74,7 @@ struct CameraView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                    .tapToPresent(OCRImageView(image: image), .FullScreen)
+                    .tapToPresent(OCRImageView(image: image).onAppear(perform: viewModel.stop).onDisappear(perform: viewModel.start), .FullScreen)
             } else {
                 RoundedRectangle(cornerRadius: 10)
                     .frame(width: 60, height: 60, alignment: .center)

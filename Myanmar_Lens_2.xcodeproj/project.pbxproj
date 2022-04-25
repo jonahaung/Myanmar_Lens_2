@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		471AA5CC281707AE005F2582 /* QuadrilateralImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5CB281707AE005F2582 /* QuadrilateralImageView.swift */; };
+		471AA5CE281707EB005F2582 /* OCRImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5CD281707EB005F2582 /* OCRImageViewModel.swift */; };
+		471AA5D028170807005F2582 /* ImageFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5CF28170807005F2582 /* ImageFilterer.swift */; };
+		471AA5D6281708CC005F2582 /* +UIIMage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5D5281708CC005F2582 /* +UIIMage.swift */; };
+		471AA5D92817103E005F2582 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5D82817103E005F2582 /* TextRecognizer.swift */; };
+		471AA5DB28171073005F2582 /* ImageTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5DA28171073005F2582 /* ImageTextRecognizer.swift */; };
+		471AA5DD28171834005F2582 /* ViewTextReconizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5DC28171834005F2582 /* ViewTextReconizable.swift */; };
 		474782932816365F00B3B6C4 /* Myanmar_Lens_2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782922816365F00B3B6C4 /* Myanmar_Lens_2App.swift */; };
 		474782952816365F00B3B6C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782942816365F00B3B6C4 /* ContentView.swift */; };
 		474782972816366100B3B6C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 474782962816366100B3B6C4 /* Assets.xcassets */; };
@@ -43,7 +50,7 @@
 		474782FF281643C800B3B6C4 /* AlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782F5281643C800B3B6C4 /* AlertError.swift */; };
 		47478300281643C800B3B6C4 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782F6281643C800B3B6C4 /* CameraView.swift */; };
 		47478302281643C800B3B6C4 /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782F8281643C800B3B6C4 /* CameraService.swift */; };
-		4747830428164B1400B3B6C4 /* VisionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747830328164B1400B3B6C4 /* VisionService.swift */; };
+		4747830428164B1400B3B6C4 /* VideoTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747830328164B1400B3B6C4 /* VideoTextRecognizer.swift */; };
 		47478306281652FA00B3B6C4 /* VideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47478305281652FA00B3B6C4 /* VideoPreviewView.swift */; };
 		474783082816731F00B3B6C4 /* +Translate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783072816731F00B3B6C4 /* +Translate.swift */; };
 		4747830A2816790200B3B6C4 /* TranslateOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783092816790100B3B6C4 /* TranslateOperation.swift */; };
@@ -53,6 +60,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		471AA5CB281707AE005F2582 /* QuadrilateralImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadrilateralImageView.swift; sourceTree = "<group>"; };
+		471AA5CD281707EB005F2582 /* OCRImageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCRImageViewModel.swift; sourceTree = "<group>"; };
+		471AA5CF28170807005F2582 /* ImageFilterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFilterer.swift; sourceTree = "<group>"; };
+		471AA5D5281708CC005F2582 /* +UIIMage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "+UIIMage.swift"; sourceTree = "<group>"; };
+		471AA5D82817103E005F2582 /* TextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
+		471AA5DA28171073005F2582 /* ImageTextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTextRecognizer.swift; sourceTree = "<group>"; };
+		471AA5DC28171834005F2582 /* ViewTextReconizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTextReconizable.swift; sourceTree = "<group>"; };
 		4747828F2816365F00B3B6C4 /* Myanmar_Lens_2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Myanmar_Lens_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		474782922816365F00B3B6C4 /* Myanmar_Lens_2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Myanmar_Lens_2App.swift; sourceTree = "<group>"; };
 		474782942816365F00B3B6C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -90,7 +104,7 @@
 		474782F5281643C800B3B6C4 /* AlertError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertError.swift; sourceTree = "<group>"; };
 		474782F6281643C800B3B6C4 /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		474782F8281643C800B3B6C4 /* CameraService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
-		4747830328164B1400B3B6C4 /* VisionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionService.swift; sourceTree = "<group>"; };
+		4747830328164B1400B3B6C4 /* VideoTextRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTextRecognizer.swift; sourceTree = "<group>"; };
 		47478305281652FA00B3B6C4 /* VideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPreviewView.swift; sourceTree = "<group>"; };
 		474783072816731F00B3B6C4 /* +Translate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+Translate.swift"; sourceTree = "<group>"; };
 		474783092816790100B3B6C4 /* TranslateOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateOperation.swift; sourceTree = "<group>"; };
@@ -111,6 +125,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		471AA5D728171027005F2582 /* TextRecognizer */ = {
+			isa = PBXGroup;
+			children = (
+				471AA5D82817103E005F2582 /* TextRecognizer.swift */,
+				4747830328164B1400B3B6C4 /* VideoTextRecognizer.swift */,
+				471AA5DA28171073005F2582 /* ImageTextRecognizer.swift */,
+				471AA5DC28171834005F2582 /* ViewTextReconizable.swift */,
+			);
+			path = TextRecognizer;
+			sourceTree = "<group>";
+		};
 		474782862816365F00B3B6C4 = {
 			isa = PBXGroup;
 			children = (
@@ -228,6 +253,7 @@
 		474782C528163BC800B3B6C4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				471AA5D728171027005F2582 /* TextRecognizer */,
 				4747830B28167A6A00B3B6C4 /* TranslateOperationGroup.swift */,
 				474783092816790100B3B6C4 /* TranslateOperation.swift */,
 				474782C628163BD600B3B6C4 /* StringTracker.swift */,
@@ -281,6 +307,10 @@
 			isa = PBXGroup;
 			children = (
 				4747830D2816A05100B3B6C4 /* OCRImageView.swift */,
+				471AA5CD281707EB005F2582 /* OCRImageViewModel.swift */,
+				471AA5CB281707AE005F2582 /* QuadrilateralImageView.swift */,
+				471AA5CF28170807005F2582 /* ImageFilterer.swift */,
+				471AA5D5281708CC005F2582 /* +UIIMage.swift */,
 			);
 			path = ImageOCR;
 			sourceTree = "<group>";
@@ -313,7 +343,6 @@
 				474782F0281643C800B3B6C4 /* CameraViewModel.swift */,
 				47478305281652FA00B3B6C4 /* VideoPreviewView.swift */,
 				4747830F2816E9D700B3B6C4 /* CameraService */,
-				474783102816EA0B00B3B6C4 /* VisionService */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -327,14 +356,6 @@
 				474782F3281643C800B3B6C4 /* PhotoCaptureProcessor.swift */,
 			);
 			path = CameraService;
-			sourceTree = "<group>";
-		};
-		474783102816EA0B00B3B6C4 /* VisionService */ = {
-			isa = PBXGroup;
-			children = (
-				4747830328164B1400B3B6C4 /* VisionService.swift */,
-			);
-			path = VisionService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -414,8 +435,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				471AA5DB28171073005F2582 /* ImageTextRecognizer.swift in Sources */,
+				471AA5CC281707AE005F2582 /* QuadrilateralImageView.swift in Sources */,
+				471AA5DD28171834005F2582 /* ViewTextReconizable.swift in Sources */,
 				474782E528163DD400B3B6C4 /* TapToShowComfirmationDialog.swift in Sources */,
+				471AA5D028170807005F2582 /* ImageFilterer.swift in Sources */,
 				4747829C2816366100B3B6C4 /* Persistence.swift in Sources */,
+				471AA5D92817103E005F2582 /* TextRecognizer.swift in Sources */,
 				474782D028163C1B00B3B6C4 /* EditScanCornerView.swift in Sources */,
 				474782D828163C6C00B3B6C4 /* UIImage+Utils.swift in Sources */,
 				474782EB28163E1F00B3B6C4 /* PickerNavigationView.swift in Sources */,
@@ -433,6 +459,7 @@
 				474782C728163BD600B3B6C4 /* StringTracker.swift in Sources */,
 				474782D128163C1B00B3B6C4 /* QuadrilateralView.swift in Sources */,
 				474782FB281643C800B3B6C4 /* CameraPreview.swift in Sources */,
+				471AA5CE281707EB005F2582 /* OCRImageViewModel.swift in Sources */,
 				474782B0281637F300B3B6C4 /* XFont.swift in Sources */,
 				474782932816365F00B3B6C4 /* Myanmar_Lens_2App.swift in Sources */,
 				474782B22816382D00B3B6C4 /* XIcon.swift in Sources */,
@@ -447,9 +474,10 @@
 				4747830E2816A05100B3B6C4 /* OCRImageView.swift in Sources */,
 				474782FA281643C800B3B6C4 /* CameraViewModel.swift in Sources */,
 				4747830A2816790200B3B6C4 /* TranslateOperation.swift in Sources */,
+				471AA5D6281708CC005F2582 /* +UIIMage.swift in Sources */,
 				474782C428163BB400B3B6C4 /* TextQuad.swift in Sources */,
 				474782C128163BA300B3B6C4 /* TextLayer.swift in Sources */,
-				4747830428164B1400B3B6C4 /* VisionService.swift in Sources */,
+				4747830428164B1400B3B6C4 /* VideoTextRecognizer.swift in Sources */,
 				4747830C28167A6A00B3B6C4 /* TranslateOperationGroup.swift in Sources */,
 				474782E828163DD400B3B6C4 /* TapToPushStyle.swift in Sources */,
 				474782FC281643C800B3B6C4 /* CameraService+Enums.swift in Sources */,

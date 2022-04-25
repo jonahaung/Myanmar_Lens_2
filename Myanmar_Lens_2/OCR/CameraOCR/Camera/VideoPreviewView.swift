@@ -28,7 +28,6 @@ class VideoPreviewView: UIView {
     
     private var previousPanPosition: CGPoint?
     private var closestCorner: CornerPosition?
-    private var textQuads = [TextQuad]()
     private let stringTracker = StringTracker()
     private var regionOfInterestTransform = CGAffineTransform.identity
     private var textRecognizerActive = false
@@ -103,66 +102,32 @@ extension VideoPreviewView: UIGestureRecognizerDelegate {
         }
     }
     
-    func clearTexts() {
-        textQuads.forEach{ $0.remove() }
-        textQuads.removeAll()
-        resetStable()
-    }
     private func resetStable() {
         stringTracker.reset()
     }
     
     func setActive(isActive: Bool) {
         textRecognizerActive = isActive
-        clearTexts()
         previewLayer.videoGravity = isActive ? .resizeAspectFill : videoGravity
         quadView.setActive(isActive: isActive)
         setNeedsLayout()
     }
-    
-    func translate() {
-        let group = DispatchGroup()
-        var new = [TextQuad]()
-        self.textQuads.forEach { each in
-            group.enter()
-            if let translated = Translate.find(from: each.string, toLanguage: .burmese) {
-                new.append(.init(quad: each.quad, string: translated))
-                group.leave()
-            } else {
-                Translator.shared.translate(text: each.string, from: .english, to: .burmese) { translated in
-                    if let translated = translated {
-                        new.append(.init(quad: each.quad, string: translated))
-                    }
-                    group.leave()
-                }
-            }
-        }
-        group.notify(queue: .main) {
-            self.clearTexts()
-            self.textQuads = new
-            self.quadView.display(textQuads: new)
-        }
-    }
 }
 
-extension VideoPreviewView {
+extension VideoPreviewView: ViewTextReconizable {
     
-    func displayTextBoxes(textObservations: [VNRecognizedTextObservation]) {
-        textQuads.forEach{ $0.remove() }
-        textQuads.removeAll()
-        if textObservations.isEmpty {
-            return
-        }
+    func makeTextQuads(results: [VNRecognizedTextObservation]) -> [TextQuad] {
         let regionOfInterestBounds = CGRect(origin: .zero, size: quadView.getQuadFrame().size)
         let regionViewScaleTransform = CGAffineTransform(scaleX: regionOfInterestBounds.width, y: -regionOfInterestBounds.height)
         let regionViewTranslateTransform = CGAffineTransform(translationX: 0, y: regionOfInterestBounds.height)
         let regionViewTransform = regionViewScaleTransform.concatenating(regionViewTranslateTransform)
         
-        textQuads = textObservations.map{ TextQuad(observation: $0, affineTransform: regionViewTransform )}
-        
+        return results.map{ TextQuad(observation: $0, affineTransform: regionViewTransform )}
+    }
+    
+    func display(textQuads: [TextQuad]) {
         quadView.display(textQuads: textQuads)
-        
-        let texts = textObservations.map{ $0.string }
+        let texts = textQuads.map{ $0.string }
         stringTracker.logFrame(strings: texts)
         if let stable = stringTracker.getStableString() {
             stringTracker.reset(string: stable)

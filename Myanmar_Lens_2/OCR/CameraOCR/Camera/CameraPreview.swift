@@ -11,7 +11,7 @@ import AVFoundation
 struct CameraPreview: UIViewRepresentable {
     
     let session: AVCaptureSession
-    let visionService: VisionService
+    let visionService: VideoTextRecognizer
     
     func makeUIView(context: Context) -> VideoPreviewView {
         let view = VideoPreviewView()

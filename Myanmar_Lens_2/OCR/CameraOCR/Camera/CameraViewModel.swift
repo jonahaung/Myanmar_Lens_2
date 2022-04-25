@@ -12,7 +12,7 @@ import UIKit
 final class CameraViewModel: ObservableObject {
     
     private let service = CameraService()
-    let visionService = VisionService()
+    let visionService = VideoTextRecognizer()
     
     @Published var capturedImage: UIImage?
     @Published var showAlertError = false
@@ -61,7 +61,7 @@ final class CameraViewModel: ObservableObject {
         
         if textRecognizerActive {
             if session.isRunning {
-                visionService.view?.translate()
+                visionService.translate()
                 service.stop()
             } else {
                 service.start()
@@ -84,6 +84,12 @@ final class CameraViewModel: ObservableObject {
     }
     func toggleTextRecognizer() {
         textRecognizerActive = visionService.toggle()
+    }
+    func stop() {
+        service.stop()
+    }
+    func start() {
+        service.start()
     }
 }
 

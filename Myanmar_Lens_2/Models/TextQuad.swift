@@ -38,14 +38,11 @@ struct TextQuad {
     
     func displayTextLayer(in layer: CALayer) {
         layer.addSublayer(textLayer)
+        layer.displayIfNeeded()
     }
     
     func remove() {
         textLayer.removeFromSuperlayer()
         shapeLayer.removeFromSuperlayer()
-    }
-    
-    func setStable() {
-//        shapeLayer.fillColor = UIColor.black.cgColor
     }
 }

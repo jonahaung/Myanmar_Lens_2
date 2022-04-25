@@ -9,35 +9,66 @@ import SwiftUI
 
 struct OCRImageView: View {
     
-    let image: UIImage
+    @StateObject private var viewModel: OCRImageViewModel
     @Environment(\.dismiss) var dismiss
     
-    var body: some View {
-        ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-        }
-        .overlay(topBar, alignment: .top)
-        .overlay(bottomBar, alignment: .bottom)
+    init(image: UIImage) {
+        _viewModel = .init(wrappedValue: .init(image: image))
     }
     
-    private var topBar: some View {
-        HStack {
-            Button("Cancel"){
-                dismiss()
+    var body: some View {
+        PickerNavigationView {
+            ZStack {
+                Color.black.edgesIgnoringSafeArea(.all)
+                VStack(spacing: 0) {
+                    Spacer()
+                    QuadrilateralImageView(viewModel: viewModel)
+                        .overlay(loadingView())
+                    Spacer()
+                    bottomBar()
+                }
             }
-            Spacer()
+            .navigationBarItems(trailing: retakeButton())
+            .task {
+                viewModel.task()
+            }
         }
-        .padding()
         .accentColor(.white)
     }
-    private var bottomBar: some View {
+    
+    private func retakeButton() -> some View {
+        Button("Retake") {
+            dismiss()
+        }
+    }
+    private func bottomBar() -> some View {
         HStack {
+            Button("Reset", role: .cancel) {
+                viewModel.reset()
+            }
+            .disabled(!viewModel.hasChanges)
+            Spacer()
+            Menu {
+                ForEach(ImageFilterMode.allCases) { mode in
+                    Button(mode.description) {
+                        viewModel.filter(mode)
+                    }
+                }
+            } label: {
+                XIcon(.camera_filters)
+            }
+            Spacer()
+            Button("Translate") {
+                viewModel.translate()
+            }
+            .buttonStyle(.bordered)
+        }
+        .padding(.horizontal)
+    }
+    
+    private func loadingView() -> some View {
+        Group {
             
         }
-        .padding()
-        .accentColor(.white)
     }
 }
