@@ -34,11 +34,12 @@ struct TextQuad {
     
     func displayShapeLayer(in layer: CALayer) {
         layer.addSublayer(shapeLayer)
+        shapeLayer.setNeedsDisplay()
     }
     
     func displayTextLayer(in layer: CALayer) {
         layer.addSublayer(textLayer)
-        layer.displayIfNeeded()
+        textLayer.setNeedsDisplay()
     }
     
     func remove() {

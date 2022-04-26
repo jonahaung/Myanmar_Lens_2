@@ -41,7 +41,7 @@ extension OCRImageViewModel {
         hasChanges = true
     }
     
-    func translate() {
+    @MainActor func translate() {
         textRecognizer.translate()
     }
 }

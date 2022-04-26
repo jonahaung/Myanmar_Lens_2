@@ -57,12 +57,12 @@ final class CameraViewModel: ObservableObject {
         service.sampleBufferDelegate = visionService
     }
     
-    func capturePhoto() {
+    @MainActor func capturePhoto() {
         
         if textRecognizerActive {
             if session.isRunning {
-                visionService.translate()
                 service.stop()
+                visionService.translate()
             } else {
                 service.start()
             }

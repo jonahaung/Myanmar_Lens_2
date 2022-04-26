@@ -31,7 +31,7 @@ class TextRecognizer: NSObject {
         guard let results = request.results as? [VNRecognizedTextObservation] else { return }
         DispatchQueue.main.async {
             self.semaphore.signal()
-            self.display(results: results.filter{ $0.confidence > 0.6 })
+            self.display(results: results.filter{ $0.confidence > 0.4 })
         }
     }
     
@@ -46,45 +46,44 @@ class TextRecognizer: NSObject {
         }
     }
     
-    internal func display(results: [VNRecognizedTextObservation]) {
+    @MainActor internal func display(results: [VNRecognizedTextObservation]) {
         clearTexts()
     }
     
-    internal func display(textQuads: [TextQuad]) {
+    @MainActor internal func display(textQuads: [TextQuad]) {
         self.textQuads = textQuads
     }
     
-    private func translate(textQuads: [TextQuad]) {
-        semaphore.signal()
-        var translatedTextQuad = [TextQuad]()
-        let group = DispatchGroup()
-        textQuads.forEach { each in
-            group.enter()
-            if let translated = Translate.find(from: each.string, toLanguage: .burmese) {
-                translatedTextQuad.append(.init(quad: each.quad, string: translated))
-                group.leave()
-            } else {
-                
-                translator.translate(text: each.string.lowercased().trimmed, from: .english, to: .burmese) { translated in
-                    if let translated = translated {
-                        translatedTextQuad.append(.init(quad: each.quad, string: translated))
+    private func translate(textQuads: [TextQuad]) async -> [TextQuad] {
+        return await withTaskGroup(of: TextQuad.self) { group in
+            var newTextQuads = [TextQuad]()
+            newTextQuads.reserveCapacity(textQuads.count)
+            for each in textQuads {
+                group.addTask {
+                    if let translated = await Translator.shared.translate(text: each.string, from: .english, to: .burmese) {
+                        return TextQuad(quad: each.quad, string: translated)
                     }
-                    group.leave()
+                    return each
                 }
             }
-        }
-        group.notify(queue: .main) {
-            self.clearTexts()
-            self.display(textQuads: translatedTextQuad)
+            for await textQuad in group {
+                newTextQuads.append(textQuad)
+            }
+            return newTextQuads
         }
     }
     
-    private func clearTexts() {
+    @MainActor private func clearTexts() {
         textQuads.forEach{ $0.remove() }
         textQuads.removeAll()
     }
     
-    func translate() {
-        translate(textQuads: textQuads)
+    @MainActor func translate() {
+        Task(priority: .userInitiated) { [weak self] in
+            guard let self = self else { return }
+            let translatedTextQuad = await translate(textQuads: self.textQuads)
+            clearTexts()
+            display(textQuads: translatedTextQuad)
+        }
     }
 }

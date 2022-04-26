@@ -74,6 +74,7 @@ class QuadImageView: UIView {
 
 extension QuadImageView: ViewTextReconizable {
     func makeTextQuads(results: [VNRecognizedTextObservation]) -> [TextQuad] {
+        calculateTransform()
         return results.map{ TextQuad.init(observation: $0, affineTransform: imageViewTransform)}
     }
     func display(textQuads: [TextQuad]) {
