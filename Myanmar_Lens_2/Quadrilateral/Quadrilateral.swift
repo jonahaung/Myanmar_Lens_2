@@ -1,35 +1,29 @@
 //
 //  Quadrilateral.swift
-//  WeScan
+//  SwiftCamera
 //
-//  Created by Boris Emorine on 2/8/18.
-//  Copyright © 2018 WeTransfer. All rights reserved.
+//  Created by Aung Ko Min on 5/4/22.
 //
 
 import UIKit
 import Vision
 
-struct Quadrilateral: Transformable {
+struct Quadrilateral {
     
     var topLeft: CGPoint
     var topRight: CGPoint
     var bottomRight: CGPoint
     var bottomLeft: CGPoint
-    var boundingBox: CGRect
-    var isSelected: Bool
     
-    init(topLeft: CGPoint, topRight: CGPoint, bottomRight: CGPoint, bottomLeft: CGPoint, isSelected: Bool) {
+    init(topLeft: CGPoint, topRight: CGPoint, bottomRight: CGPoint, bottomLeft: CGPoint) {
         self.topLeft = topLeft
         self.topRight = topRight
         self.bottomRight = bottomRight
         self.bottomLeft = bottomLeft
-        self.isSelected = isSelected
-        boundingBox = CGRect(x: topLeft.x, y: topLeft.y, width: topRight.x-topLeft.x, height: topRight.y-bottomRight.y)
     }
     
-    init(rectangleObservation: VNRectangleObservation) {
-        self.init(topLeft: rectangleObservation.topLeft, topRight: rectangleObservation.topRight, bottomRight: rectangleObservation.bottomRight, bottomLeft: rectangleObservation.bottomLeft, isSelected: true)
-        boundingBox = rectangleObservation.boundingBox
+    init(_ observation: VNRectangleObservation) {
+        self.init(topLeft: observation.topLeft, topRight: observation.topRight, bottomRight: observation.bottomRight, bottomLeft: observation.bottomLeft)
     }
 
     init(_ rect: CGRect) {
@@ -37,12 +31,15 @@ struct Quadrilateral: Transformable {
         let topRight = CGPoint(x: rect.maxX, y: rect.minY)
         let bottomLeft = CGPoint(x: rect.minX, y: rect.maxY)
         let bottomRight = CGPoint(x: rect.maxX, y: rect.maxY)
-        self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, isSelected: true)
+        self.init(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
     }
     
     init(_ points: [CGPoint]) {
-        self.init(topLeft: points[0], topRight: points[1], bottomRight: points[2], bottomLeft: points[3], isSelected: true)
+        self.init(topLeft: points[0], topRight: points[1], bottomRight: points[2], bottomLeft: points[3])
     }
+}
+// Getters
+extension Quadrilateral {
     var corners: [CGPoint] {
         return [topLeft, topRight, bottomLeft, bottomRight]
     }
@@ -67,15 +64,26 @@ struct Quadrilateral: Transformable {
             height: max(bottomLeft.y, bottomRight.y) - origin.y)
         return CGRect(origin: origin, size: size)
     }
-    
-    mutating func toggleSelect() {
-        self.isSelected.toggle()
+    var fittedRect: CGRect {
+        CGRect(origin: topLeft, size: CGSize(width: topRight.x - topLeft.x, height: topLeft.y - bottomLeft.y))
     }
-    
+}
+
+
+// Transforming
+extension Quadrilateral: Transformable {
     func applying(_ transform: CGAffineTransform) -> Quadrilateral {
-        Quadrilateral(topLeft: topLeft.applying(transform), topRight: topRight.applying(transform), bottomRight: bottomRight.applying(transform), bottomLeft: bottomLeft.applying(transform), isSelected: isSelected)
+        Quadrilateral(topLeft: topLeft.applying(transform), topRight: topRight.applying(transform), bottomRight: bottomRight.applying(transform), bottomLeft: bottomLeft.applying(transform))
     }
     
+    func toCartesian(withHeight height: CGFloat) -> Quadrilateral {
+        let topLeft = self.topLeft.cartesian(withHeight: height)
+        let topRight = self.topRight.cartesian(withHeight: height)
+        let bottomRight = self.bottomRight.cartesian(withHeight: height)
+        let bottomLeft = self.bottomLeft.cartesian(withHeight: height)
+        
+        return Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft)
+    }
     /// Reorganizes the current quadrilateal, making sure that the points are at their appropriate positions. For example, it ensures that the top left point is actually the top and left point point of the quadrilateral.
     mutating func reorganize() {
         let points = [topLeft, topRight, bottomRight, bottomLeft]
@@ -140,29 +148,6 @@ struct Quadrilateral: Transformable {
             point1.x < point2.x
         }
     }
-    
-    func angle() -> CGFloat {
-        let starting = topLeft
-        let ending = topRight
-        let center = CGPoint(x: ending.x - starting.x, y: ending.y - starting.y)
-        let radians = atan2(center.y, center.x)
-        let degrees = radians
-        return degrees > 0 ? degrees : degrees + degrees
-    }
-}
-
-extension Quadrilateral {
-    
-    func toCartesian(withHeight height: CGFloat) -> Quadrilateral {
-        let topLeft = self.topLeft.cartesian(withHeight: height)
-        let topRight = self.topRight.cartesian(withHeight: height)
-        let bottomRight = self.bottomRight.cartesian(withHeight: height)
-        let bottomLeft = self.bottomLeft.cartesian(withHeight: height)
-        
-        return Quadrilateral(topLeft: topLeft, topRight: topRight, bottomRight: bottomRight, bottomLeft: bottomLeft, isSelected: isSelected)
-    }
-    
-    static let defaultQuad = Quadrilateral(.zero)
 }
 
 extension Quadrilateral: Equatable {

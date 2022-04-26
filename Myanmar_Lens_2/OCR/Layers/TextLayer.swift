@@ -9,7 +9,11 @@ import UIKit
 
 class TextLayer: CATextLayer {
     
-
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
+    var newText: String?
+    
     init(string: String, rect: CGRect) {
         super.init()
         let fontSize = rect.height * 0.7

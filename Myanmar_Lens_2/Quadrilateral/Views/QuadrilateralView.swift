@@ -41,7 +41,7 @@ final class QuadrilateralView: UIView {
         return EditScanCornerView(frame: CGRect(origin: .zero, size: cornerViewSize), position: .bottomLeft)
     }()
     
-    private(set) var viewQuad = Quadrilateral.defaultQuad
+    private(set) var viewQuad = Quadrilateral(.zero)
     
     public var isSquare = true
     

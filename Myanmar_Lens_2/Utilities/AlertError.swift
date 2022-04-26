@@ -6,7 +6,9 @@
 //
 
 import Foundation
-public struct AlertError {
+public struct AlertError: Identifiable {
+    public var id = UUID().uuidString
+    
     public var title: String = ""
     public var message: String = ""
     public var primaryButtonTitle = "Accept"

@@ -10,17 +10,16 @@ import NaturalLanguage
 
 extension Translate {
     
-    static func createIfNeeded(from: String, fromLanguage: NLLanguage, to: String, toLanguage: NLLanguage) {
-        let from = from.lowercased().trimmed
-        let to = to.lowercased().trimmed
-        guard check(from: from, fromLanguage: fromLanguage, to: to, toLanguage: toLanguage) == nil else { return }
+    static func createIfNeeded(source: String, sourceLanguage: NLLanguage, target: String, targetLanguage: NLLanguage) {
+        let from = source.lowercased().trimmed
+        let to = target.lowercased().trimmed
+        guard check(from: from, fromLanguage: sourceLanguage, to: to, toLanguage: targetLanguage) == nil else { return }
         let context = PersistenceController.shared.viewContext
         let x = Translate(context: context)
         x.from = from
-        x.fromLanguage = fromLanguage.rawValue
+        x.fromLanguage = sourceLanguage.rawValue
         x.to = to
-        x.toLanguage = toLanguage.rawValue
-        PersistenceController.shared.save()
+        x.toLanguage = targetLanguage.rawValue
     }
     
     static func check(from: String, fromLanguage: NLLanguage, to: String, toLanguage: NLLanguage) -> Translate? {
@@ -70,7 +69,6 @@ extension Translate {
         } catch {
             print(error)
         }
-        PersistenceController.shared.save()
     }
     
     static func all() -> [Translate] {

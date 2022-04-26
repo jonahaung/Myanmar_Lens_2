@@ -8,16 +8,17 @@
 import Foundation
 
 class StringTracker {
-    var frameIndex: Int64 = 0
+    
+    private var frameIndex: Int64 = 0
 
     typealias StringObservation = (lastSeen: Int64, count: Int64)
     
-    // Dictionary of seen strings. Used to get stable recognition before
-    // displaying anything.
-    var seenStrings = [String: StringObservation]()
-    var bestCount = Int64(0)
-    var bestString = ""
+    private var seenStrings = [String: StringObservation]()
+    private var bestCount = Int64(0)
+    private var bestString = ""
     var limit = 20
+    
+    private var cachedStables = Set<String>()
     
     func logFrame(strings: [String]) {
         for string in strings {
@@ -34,7 +35,7 @@ class StringTracker {
         // Also find the (non-pruned) string with the greatest count.
         for (string, obs) in seenStrings {
             // Remove previously seen text after 30 frames (~1s).
-            if obs.lastSeen < frameIndex - 100 {
+            if obs.lastSeen < frameIndex - 30 {
                 obsoleteStrings.append(string)
             }
             
@@ -68,8 +69,13 @@ class StringTracker {
         bestString = ""
     }
     func reset(string: String) {
+        cachedStables.insert(string)
         seenStrings.removeValue(forKey: string)
         bestCount = 0
         bestString = ""
+    }
+    
+    func isCachedStable(_ string: String) -> Bool {
+        cachedStables.contains(string)
     }
 }

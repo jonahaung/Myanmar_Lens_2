@@ -5,34 +5,28 @@
 //  Created by Aung Ko Min on 25/4/22.
 //
 
-import UIKit
-import AVFoundation
-import Translator
-import Vision
 
-class VideoPreviewView: UIView {
+import AVFoundation
+
+class CameraOCRPreviewView: UIView {
     
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
     private var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
+    private let quadView: QuadrilateralView = {
+        $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return $0
+    }(QuadrilateralView())
     
     var captureSession: AVCaptureSession? {
         didSet {
             previewLayer.session = captureSession
         }
     }
-    
-    private let quadView: QuadrilateralView = {
-        $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        return $0
-    }(QuadrilateralView())
-    
+
     private var previousPanPosition: CGPoint?
     private var closestCorner: CornerPosition?
-    private let stringTracker = StringTracker()
     private var regionOfInterestTransform = CGAffineTransform.identity
-    private var textRecognizerActive = false
-    private let translateOperationGroup = TranslateOperationGroup()
-    private var videoGravity: AVLayerVideoGravity = .resizeAspect
+    private var isActive = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,7 +34,6 @@ class VideoPreviewView: UIView {
         quadView.frame = bounds
         addSubview(quadView)
         setupGestureRecognizer()
-        videoGravity = previewLayer.videoGravity
     }
     
     required init?(coder: NSCoder) {
@@ -60,14 +53,16 @@ class VideoPreviewView: UIView {
     }
 }
 
-extension VideoPreviewView: UIGestureRecognizerDelegate {
+extension CameraOCRPreviewView: UIGestureRecognizerDelegate {
+    
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer is UILongPressGestureRecognizer else {
             return super.gestureRecognizerShouldBegin(gestureRecognizer)
         }
         let location = gestureRecognizer.location(in: self)
-        return textRecognizerActive && quadView.getQuadFrame().intersects(location.surroundingSquare(withSize: CGSize(width: 100, height: 100)))
+        return isActive && quadView.getQuadFrame().intersects(location.surroundingSquare(withSize: CGSize(width: 100, height: 100)))
     }
+    
     private func setupGestureRecognizer() {
         let panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.minimumPressDuration = 0
@@ -102,43 +97,45 @@ extension VideoPreviewView: UIGestureRecognizerDelegate {
         }
     }
     
-    private func resetStable() {
-        stringTracker.reset()
-    }
-    
     func setActive(isActive: Bool) {
-        textRecognizerActive = isActive
-        previewLayer.videoGravity = isActive ? .resizeAspectFill : videoGravity
+        previewLayer.videoGravity = isActive ? .resizeAspectFill : .resizeAspect
         quadView.setActive(isActive: isActive)
+        self.isActive = isActive
         setNeedsLayout()
     }
 }
 
-extension VideoPreviewView: ViewTextReconizable {
+extension CameraOCRPreviewView {
     
-    func makeTextQuads(results: [VNRecognizedTextObservation]) -> [TextQuad] {
+    func textsAffineTransform() -> CGAffineTransform {
         let regionOfInterestBounds = CGRect(origin: .zero, size: quadView.getQuadFrame().size)
         let regionViewScaleTransform = CGAffineTransform(scaleX: regionOfInterestBounds.width, y: -regionOfInterestBounds.height)
         let regionViewTranslateTransform = CGAffineTransform(translationX: 0, y: regionOfInterestBounds.height)
-        let regionViewTransform = regionViewScaleTransform.concatenating(regionViewTranslateTransform)
-        
-        return results.map{ TextQuad(observation: $0, affineTransform: regionViewTransform )}
+        return regionViewScaleTransform.concatenating(regionViewTranslateTransform)
     }
     
     func display(textQuads: [TextQuad]) {
         quadView.display(textQuads: textQuads)
-        let texts = textQuads.map{ $0.string }
-        stringTracker.logFrame(strings: texts)
-        if let stable = stringTracker.getStableString() {
-            stringTracker.reset(string: stable)
-            translateOperationGroup.addIfNeeded(stable.lowercased().trimmed, fromLanguage: .english, toLanguage: .burmese)
-        }
     }
 }
 
-extension VNRecognizedTextObservation {
+import SwiftUI
+
+extension CameraOCRPreviewView {
     
-    var string: String {
-        return topCandidates(1).first?.string ?? ""
+    struct SwiftUIView: UIViewRepresentable {
+        
+        let viewModel: CameraOCRViewModel
+        
+        func makeUIView(context: Context) -> CameraOCRPreviewView {
+            let view = CameraOCRPreviewView()
+            view.captureSession = viewModel.session
+            viewModel.configure(view: view)
+            return view
+        }
+        
+        func updateUIView(_ uiView: CameraOCRPreviewView, context: Context) {
+            
+        }
     }
 }

@@ -16,20 +16,20 @@ final class TranslateOperationGroup {
         return $0
     }(OperationQueue())
     
-    private var operations = [String: TranslateOperation]()
+    private var currentOperations = [String: TranslateOperation]()
     
-    func addIfNeeded(_ string: String, fromLanguage: NLLanguage, toLanguage: NLLanguage) {
+    func addIfNeeded(_ string: String) {
         let string = string.lowercased().trimmed
-        if operations[string] == nil {
-            let op = TranslateOperation(string, fromLanguage: fromLanguage, toLanguage: toLanguage)
+        if currentOperations[string] == nil {
+            let op = TranslateOperation(string)
             queue.addOperation(op)
-            operations[string] = op
+            currentOperations[string] = op
         }
     }
     
     func cancel() {
         queue.cancelAllOperations()
-        operations.forEach{ $0.value.cancel() }
+        currentOperations.forEach{ $0.value.cancel() }
     }
     
     deinit {

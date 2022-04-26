@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
-
 @main
 struct Myanmar_Lens_2App: App {
-    let persistenceController = PersistenceController.shared
-
+   
     var body: some Scene {
         WindowGroup {
-            ContentView()
-
+            NavigationView {
+                ContentView()
+            }
+            .navigationViewStyle(.stack)
         }
     }
 }

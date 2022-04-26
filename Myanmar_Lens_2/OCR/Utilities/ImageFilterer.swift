@@ -71,7 +71,6 @@ final class ImageFilterer {
     class func crop(image: UIImage, quad: Quadrilateral, canvasSize: CGSize) -> UIImage? {
         let imageSize = image.size
         let scaleT = CGAffineTransform.scaleTransform(forSize: canvasSize, aspectFillInSize: imageSize)
-        
         var newQuad = quad.applying(scaleT).toCartesian(withHeight: imageSize.height)
         newQuad.reorganize()
         

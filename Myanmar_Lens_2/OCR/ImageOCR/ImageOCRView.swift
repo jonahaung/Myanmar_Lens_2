@@ -9,22 +9,7 @@ import SwiftUI
 import AVFoundation
 import Vision
 
-struct QuadrilateralImageView: UIViewRepresentable {
-    
-    let viewModel: OCRImageViewModel
-    
-    func makeUIView(context: Context) -> QuadImageView {
-        let view = QuadImageView()
-        view.image = viewModel.image
-        viewModel.textRecognizer.view = view
-        return view
-    }
-    
-    func updateUIView(_ uiView: QuadImageView, context: Context) {}
-}
-
-
-class QuadImageView: UIView {
+class ImageOCRView: UIView {
     
     private let imageView: UIImageView = {
         $0.contentMode = .scaleAspectFit
@@ -37,13 +22,10 @@ class QuadImageView: UIView {
     
     
     private var imageViewTransform = CGAffineTransform.identity
+    
     var image: UIImage? {
-        get {
-            imageView.image
-        }
-        set {
-            imageView.image = newValue
-        }
+        get { imageView.image }
+        set { imageView.image = newValue }
     }
     
     init() {
@@ -51,6 +33,7 @@ class QuadImageView: UIView {
         addSubview(imageView)
         addSubview(quadView)
     }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented")}
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -60,10 +43,6 @@ class QuadImageView: UIView {
         quadView.frame = imageViewFrame
         calculateTransform()
     }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private func calculateTransform() {
         let imageViewFrame = imageView.frame
         let scaleT = CGAffineTransform(scaleX: imageViewFrame.width, y: -imageViewFrame.height)
@@ -72,12 +51,30 @@ class QuadImageView: UIView {
     }
 }
 
-extension QuadImageView: ViewTextReconizable {
-    func makeTextQuads(results: [VNRecognizedTextObservation]) -> [TextQuad] {
-        calculateTransform()
-        return results.map{ TextQuad.init(observation: $0, affineTransform: imageViewTransform)}
+extension ImageOCRView {
+    
+    func textsAffineTransform() -> CGAffineTransform {
+        imageViewTransform
     }
+    
     func display(textQuads: [TextQuad]) {
         quadView.display(textQuads: textQuads)
+    }
+}
+
+
+extension ImageOCRView {
+    
+    struct SwiftUIView: UIViewRepresentable {
+        
+        let viewModel: ImageOCRViewModel
+        
+        func makeUIView(context: Context) -> ImageOCRView {
+            let view = ImageOCRView()
+            viewModel.configure(view: view)
+            return view
+        }
+        
+        func updateUIView(_ uiView: ImageOCRView, context: Context) {}
     }
 }

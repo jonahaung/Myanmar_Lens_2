@@ -16,14 +16,13 @@ public class CameraService {
     typealias PhotoCaptureSessionID = String
     
     @Published public var flashMode: AVCaptureDevice.FlashMode = .off
-    @Published public var shouldShowAlertView = false
     @Published public var shouldShowSpinner = false
     @Published public var willCapturePhoto = false
     @Published public var isCameraButtonDisabled = true
     @Published public var isCameraUnavailable = true
     @Published public var capturedImage: UIImage?
-    
-    public var alertError: AlertError = AlertError()
+    @Published public var videoOutputActive = false
+    @Published public var alertError: AlertError?
     
     
     public let session = AVCaptureSession()
@@ -34,12 +33,11 @@ public class CameraService {
     
     // Communicate with the session and other session objects on this queue.
     private let sessionQueue = DispatchQueue(label: "session queue")
-    private let videoOutputQueue = DispatchQueue(label: "VideoOutput")
+    
     
     @objc dynamic var videoDeviceInput: AVCaptureDeviceInput!
     @objc dynamic var videoOutput = AVCaptureVideoDataOutput()
-    
-    weak var sampleBufferDelegate: AVCaptureVideoDataOutputSampleBufferDelegate?
+
     // MARK: Device Configuration Properties
     private let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera, .builtInTrueDepthCamera], mediaType: .video, position: .unspecified)
     
@@ -93,16 +91,13 @@ public class CameraService {
             // The user has previously denied access.
             setupResult = .notAuthorized
             
-            DispatchQueue.main.async {
-                self.alertError = AlertError(title: "Camera Access", message: "SwiftCamera doesn't have access to use your camera, please update your privacy settings.", primaryButtonTitle: "Settings", secondaryButtonTitle: nil, primaryAction: {
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
-                                              options: [:], completionHandler: nil)
-                    
-                }, secondaryAction: nil)
-                self.shouldShowAlertView = true
-                self.isCameraUnavailable = true
-                self.isCameraButtonDisabled = true
-            }
+            self.alertError = AlertError(title: "Camera Access", message: "SwiftCamera doesn't have access to use your camera, please update your privacy settings.", primaryButtonTitle: "Settings", secondaryButtonTitle: nil, primaryAction: {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!,
+                                          options: [:], completionHandler: nil)
+                
+            }, secondaryAction: nil)
+            self.isCameraUnavailable = true
+            self.isCameraButtonDisabled = true
         }
     }
     
@@ -156,7 +151,6 @@ public class CameraService {
             ]
             videoOutput.videoSettings = settings
             videoOutput.alwaysDiscardsLateVideoFrames = true
-            videoOutput.setSampleBufferDelegate(self.sampleBufferDelegate, queue: videoOutputQueue)
             
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
@@ -217,6 +211,13 @@ public class CameraService {
         self.isConfigured = true
         
         self.start()
+    }
+    
+    public func setSampleBufferDelegate(delegate: AVCaptureVideoDataOutputSampleBufferDelegate?, queue: DispatchQueue) {
+        sessionQueue.async {
+            self.videoOutput.setSampleBufferDelegate(delegate, queue: queue)
+            self.videoOutputActive = delegate != nil
+        }
     }
     
     //  MARK: Device Configuration
@@ -291,10 +292,7 @@ public class CameraService {
                 }
             }
             
-            DispatchQueue.main.async {
-                //                MARK: Here enable capture button due to successfull setup
-                self.isCameraButtonDisabled = false
-            }
+            self.isCameraButtonDisabled = false
         }
     }
     
@@ -350,24 +348,21 @@ public class CameraService {
                     self.isSessionRunning = self.session.isRunning
                     
                     if self.session.isRunning {
-                        DispatchQueue.main.async {
-                            self.isCameraButtonDisabled = false
-                            self.isCameraUnavailable = false
-                        }
+                        self.isCameraButtonDisabled = false
+                        self.isCameraUnavailable = false
                     }
                     
                 case .configurationFailed, .notAuthorized:
                     print("Application not authorized to use camera")
                     
-                    DispatchQueue.main.async {
-                        self.alertError = AlertError(title: "Camera Error", message: "Camera configuration failed. Either your device camera is not available or its missing permissions", primaryButtonTitle: "Accept", secondaryButtonTitle: nil, primaryAction: nil, secondaryAction: nil)
-                        self.shouldShowAlertView = true
-                        self.isCameraButtonDisabled = true
-                        self.isCameraUnavailable = true
-                    }
+                    self.alertError = AlertError(title: "Camera Error", message: "Camera configuration failed. Either your device camera is not available or its missing permissions", primaryButtonTitle: "Accept", secondaryButtonTitle: nil, primaryAction: nil, secondaryAction: nil)
+                    self.isCameraButtonDisabled = true
+                    self.isCameraUnavailable = true
                 }
             }
         }
+        
+        
     }
     
     public func set(zoom: CGFloat){
@@ -429,7 +424,7 @@ public class CameraService {
                 }, completionHandler: { [weak self] (photoCaptureProcessor) in
                     // When the capture is complete, remove a reference to the photo capture delegate so it can be deallocated.
                     if let data = photoCaptureProcessor.photoData {
-                        self?.capturedImage = UIImage(data: data)
+                        self?.capturedImage = self?.resize(image: UIImage(data: data)!)
                         print("passing photo")
                     } else {
                         print("No photo data")
@@ -453,6 +448,16 @@ public class CameraService {
                 self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
                 self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
             }
+        }
+    }
+    
+    
+    func resize(image: UIImage, targetWidth: CGFloat = 200) -> UIImage {
+        let originalSize = image.size
+        let targetSize = CGSize(width: targetWidth, height: targetWidth*originalSize.height/originalSize.width)
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        return renderer.image { (context) in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
         }
     }
 }
