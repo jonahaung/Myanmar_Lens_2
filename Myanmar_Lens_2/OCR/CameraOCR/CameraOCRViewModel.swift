@@ -22,6 +22,9 @@ final class CameraOCRViewModel: ObservableObject {
     @Published var videoOutputActive = false
     @Published var alertError: AlertError?
     @Published var progress: CGFloat = 0
+    
+    var liveTranslatorAvilible: Bool { XDefaults.shared.soruceLanguage != .burmese }
+    
     var session: AVCaptureSession
     
     private var subscriptions = Set<AnyCancellable>()
@@ -82,6 +85,7 @@ final class CameraOCRViewModel: ObservableObject {
                 cameraService.stop {
                     DispatchQueue.main.async {
                         self.progress = 1
+                        self.captureFrame()
                     }
                 }
             } else {
@@ -93,6 +97,9 @@ final class CameraOCRViewModel: ObservableObject {
         }else {
             cameraService.capturePhoto()
         }
+    }
+    func captureFrame() {
+        capturedImage = ocr.createCurrentImage()
     }
     
     func flipCamera() {

@@ -56,10 +56,6 @@ extension Translate {
         }
     }
     
-    static func displayText(string: String, toLanguage: NLLanguage) -> String {
-        return find(from: string, toLanguage: toLanguage) ?? string
-    }
-    
     static func deleteAll() {
         let context = PersistenceController.shared.viewContext
         let request: NSFetchRequest<NSFetchRequestResult> = Translate.fetchRequest()

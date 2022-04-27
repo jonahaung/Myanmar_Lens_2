@@ -33,6 +33,9 @@ struct ContentView: View {
             Button("Reset") {
                 Translate.deleteAll()
             }
+            
+            Text("Text Translator")
+                .tapToPresent(TextTranslateViewController(), .FullScreen)
             XIcon(.camera_fill)
                 .tapToPresent(CameraOCRViewController(), .FullScreen)
         }

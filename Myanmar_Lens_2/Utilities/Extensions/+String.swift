@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import NaturalLanguage
 
 extension String: Identifiable {
     public var id: String { self }
@@ -72,9 +73,9 @@ extension String {
         return str
     }
     var trimmed: String { self.trimmingCharacters(in: .whitespacesAndNewlines) }
-    var language: String { NSLinguisticTagger.dominantLanguage(for: self) ?? ""}
-    var isMyanar: Bool { language == "my" }
-    var isEnglish: Bool { language == "eng" }
+    var languageString: String? { NSLinguisticTagger.dominantLanguage(for: self) }
+    var isMyanar: Bool { languageString == "my" }
+    var isEnglish: Bool { languageString == "eng" }
 }
 
 

@@ -13,13 +13,13 @@ class TextQuad {
     private var textLayer: TextLayer
     private let shapeLayer: ShapeLayer
     var string: String
-    private let quad: Quadrilateral
+    let quad: Quadrilateral
     
     init(_ observation: VNRecognizedTextObservation,_ affineTransform: CGAffineTransform) {
         quad = Quadrilateral(observation).applying(affineTransform)
         shapeLayer = ShapeLayer(quad: quad)
-        string = observation.topCandidates(1).first?.string ?? ""
-        textLayer = TextLayer(string: Translate.displayText(string: string, toLanguage: .burmese), rect: quad.fittedRect)
+        string = observation.string
+        textLayer = TextLayer(string: XCache.displayText(for: string), rect: quad.fittedRect)
     }
     
     init(_ quad: Quadrilateral,_ string: String) {

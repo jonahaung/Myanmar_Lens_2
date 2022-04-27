@@ -52,6 +52,7 @@ extension ImageOCRViewModel {
     func reset() {
         ocr.view?.image = image
         objectWillChange.send()
+        ocr.detectText()
     }
     
     func filter(_ mode: ImageFilterMode) {
@@ -59,5 +60,8 @@ extension ImageOCRViewModel {
         ocr.view?.image = ImageFilterer.filter(for: editedImage, with: mode)
         objectWillChange.send()
         ocr.detectText()
+    }
+    func crop() {
+        
     }
 }

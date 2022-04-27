@@ -17,9 +17,7 @@ class StringTracker {
     private var bestCount = Int64(0)
     private var bestString = ""
     var limit = 20
-    
-    private var cachedStables = Set<String>()
-    
+
     func logFrame(strings: [String]) {
         for string in strings {
             if seenStrings[string] == nil {
@@ -69,13 +67,13 @@ class StringTracker {
         bestString = ""
     }
     func reset(string: String) {
-        cachedStables.insert(string)
+        XCache.OCR.stableStrings.insert(string)
         seenStrings.removeValue(forKey: string)
         bestCount = 0
         bestString = ""
     }
     
     func isCachedStable(_ string: String) -> Bool {
-        cachedStables.contains(string)
+        XCache.OCR.stableStrings.contains(string)
     }
 }

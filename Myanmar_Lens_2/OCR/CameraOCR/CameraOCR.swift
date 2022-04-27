@@ -7,12 +7,13 @@
 
 import UIKit
 import Vision
+import CoreImage
 
 class CameraOCR {
     
     private let stringTracker = StringTracker()
     private let translateOperationGroup = TranslateOperationGroup()
-    
+    private let context = CIContext()
     weak var view: CameraOCRPreviewView?
     private var textQuads = [TextQuad]()
     private var isActive = false
@@ -20,6 +21,7 @@ class CameraOCR {
     
     @Published var progress = CGFloat.zero
     @Published var alertError: AlertError?
+    private var current: CVPixelBuffer?
     
     init() {
         textRequest = VNRecognizeTextRequest()
@@ -29,11 +31,13 @@ class CameraOCR {
     
     func detectText(buffer: CVPixelBuffer) {
         if let roi = view?.regionOfInterest {
+            
             textRequest.regionOfInterest = roi
             let handler = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .up, options: [:])
             do {
                 try handler.perform([textRequest])
                 self.handleResults()
+                current = buffer
             } catch {
                 self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
             }
@@ -94,6 +98,22 @@ class CameraOCR {
         textQuads.forEach { $0.remove() }
         textQuads.removeAll()
     }
+    
+    func createCurrentImage() -> UIImage? {
+        guard let buffer = self.current else {
+            return nil
+        }
+        guard let image = CGImage.create(from: buffer) else {
+          return nil
+        }
+        let ciImage = CIImage(cgImage: image)
+        guard let cgImage = self.context.createCGImage(ciImage, from: ciImage.extent) else {
+            return nil
+        }
+        let uiImage = UIImage(cgImage: cgImage)
+        
+        return uiImage
+    }
 }
 
 extension CameraOCR {
@@ -110,4 +130,22 @@ extension CameraOCR {
 
 extension VNRecognizedTextObservation {
     var string: String { self.topCandidates(1).first?.string ?? "" }
+}
+
+import CoreGraphics
+import VideoToolbox
+
+extension CGImage {
+  static func create(from cvPixelBuffer: CVPixelBuffer?) -> CGImage? {
+    guard let pixelBuffer = cvPixelBuffer else {
+      return nil
+    }
+
+    var image: CGImage?
+    VTCreateCGImageFromCVPixelBuffer(
+      pixelBuffer,
+      options: nil,
+      imageOut: &image)
+    return image
+  }
 }

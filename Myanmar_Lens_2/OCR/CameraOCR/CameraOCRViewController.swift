@@ -32,7 +32,6 @@ struct CameraOCRViewController: View {
                 .animation(.spring())
             }
             .statusBar(hidden: true)
-            
             .task {
                 viewModel.task()
             }
@@ -61,7 +60,8 @@ struct CameraOCRViewController: View {
                     } label: {
                         XIcon(.power)
                     }
-                    
+                    Spacer()
+                    LanguageBar()
                     Spacer()
                     Button {
                         viewModel.switchFlash()
@@ -90,8 +90,9 @@ struct CameraOCRViewController: View {
                         .foregroundColor(.clear)
                     
                     if !viewModel.videoOutputActive {
-                        XIcon(.photo_on_rectangle).tapToPresent(Text("ImagePicker"))
+                        XIcon(.photo_on_rectangle)
                             .transition(.offset(x: -100))
+                            .tapToPresent(SystemImagePicker(item: $viewModel.capturedImage))
                     }
                 }
             }
@@ -131,6 +132,7 @@ struct CameraOCRViewController: View {
                     .font(.title)
             }
             .accentColor(viewModel.videoOutputActive ? .white : .init(white: 0.4))
+            .disabled(!viewModel.liveTranslatorAvilible)
         }
     }
     

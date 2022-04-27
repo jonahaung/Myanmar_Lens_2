@@ -11,12 +11,12 @@ import Vision
 
 class ImageOCRView: UIView {
     
-    private let imageView: UIImageView = {
+    let imageView: UIImageView = {
         $0.contentMode = .scaleAspectFit
         return $0
     }(UIImageView())
     
-    private let quadView: QuadrilateralView = {
+    let quadView: QuadrilateralView = {
         return $0
     }(QuadrilateralView())
     

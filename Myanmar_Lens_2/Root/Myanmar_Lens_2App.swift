@@ -15,6 +15,7 @@ struct Myanmar_Lens_2App: App {
                 ContentView()
             }
             .navigationViewStyle(.stack)
+            .environmentObject(XDefaults.shared)
         }
     }
 }

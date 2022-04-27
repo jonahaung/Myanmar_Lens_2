@@ -15,21 +15,20 @@ final class TranslateOperationGroup {
         $0.maxConcurrentOperationCount = 1
         return $0
     }(OperationQueue())
-    
-    private var currentOperations = [String: TranslateOperation]()
+
     
     func addIfNeeded(_ string: String) {
         let string = string.lowercased().trimmed
-        if currentOperations[string] == nil {
+        if XCache.Translation.translateOperations[string] == nil {
             let op = TranslateOperation(string)
             queue.addOperation(op)
-            currentOperations[string] = op
+            XCache.Translation.translateOperations[string] = op
         }
     }
     
     func cancel() {
         queue.cancelAllOperations()
-        currentOperations.forEach{ $0.value.cancel() }
+        XCache.Translation.translateOperations.forEach{ $0.value.cancel() }
     }
     
     deinit {

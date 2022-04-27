@@ -12,7 +12,7 @@ class CameraOCRPreviewView: UIView {
     
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
     private var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
-    private let quadView: QuadrilateralView = {
+    let quadView: QuadrilateralView = {
         $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return $0
     }(QuadrilateralView())
@@ -102,6 +102,10 @@ extension CameraOCRPreviewView: UIGestureRecognizerDelegate {
         quadView.setActive(isActive: isActive)
         self.isActive = isActive
         setNeedsLayout()
+    }
+    
+    func getQuadFrame() -> CGRect {
+        quadView.getQuadFrame()
     }
 }
 

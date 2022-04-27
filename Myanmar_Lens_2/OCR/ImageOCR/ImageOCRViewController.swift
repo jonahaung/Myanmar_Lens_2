@@ -55,10 +55,15 @@ struct ImageOCRViewController: View {
     
     private func bottomBar() -> some View {
         HStack {
-            Button("Reset", role: .cancel) {
-                viewModel.reset()
+            if viewModel.hasChanges {
+                Button("Reset", role: .cancel) {
+                    viewModel.reset()
+                }
+                .disabled(!viewModel.hasChanges)
             }
-            .disabled(!viewModel.hasChanges)
+            Button("Reset", role: .cancel) {
+                viewModel.crop()
+            }
             Spacer()
             Menu {
                 ForEach(ImageFilterMode.allCases) { mode in
@@ -69,7 +74,6 @@ struct ImageOCRViewController: View {
             } label: {
                 XIcon(.camera_filters)
             }
-            Spacer()
             
         }
     }

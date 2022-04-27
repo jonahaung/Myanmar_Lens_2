@@ -11,6 +11,9 @@
 		471AA5CE281707EB005F2582 /* ImageOCRViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5CD281707EB005F2582 /* ImageOCRViewModel.swift */; };
 		471AA5D028170807005F2582 /* ImageFilterer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5CF28170807005F2582 /* ImageFilterer.swift */; };
 		471AA5D6281708CC005F2582 /* +UIIMage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471AA5D5281708CC005F2582 /* +UIIMage.swift */; };
+		473B1C372818B0C000D5A7B5 /* XDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473B1C362818B0C000D5A7B5 /* XDefaults.swift */; };
+		473B1C3B2818B2BB00D5A7B5 /* LanguageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473B1C3A2818B2BB00D5A7B5 /* LanguageBar.swift */; };
+		473B1C3D2818B9E400D5A7B5 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473B1C3C2818B9E400D5A7B5 /* ImagePicker.swift */; };
 		474782932816365F00B3B6C4 /* Myanmar_Lens_2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782922816365F00B3B6C4 /* Myanmar_Lens_2App.swift */; };
 		474782952816365F00B3B6C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474782942816365F00B3B6C4 /* ContentView.swift */; };
 		474782972816366100B3B6C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 474782962816366100B3B6C4 /* Assets.xcassets */; };
@@ -55,6 +58,10 @@
 		474783122816F3BB00B3B6C4 /* TranslateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 474783112816F3BB00B3B6C4 /* TranslateCell.swift */; };
 		475C493B2818A3A000A20624 /* ImageOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475C493A2818A3A000A20624 /* ImageOCR.swift */; };
 		476B1AAE28183BE1008537A9 /* CameraFrameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476B1AAD28183BE1008537A9 /* CameraFrameService.swift */; };
+		4773BB422818C8D300BEF2F7 /* XCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773BB412818C8D300BEF2F7 /* XCache.swift */; };
+		4773BB452818D34400BEF2F7 /* TextTranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773BB442818D34400BEF2F7 /* TextTranslateViewController.swift */; };
+		4773BB472818D35400BEF2F7 /* TextTranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773BB462818D35400BEF2F7 /* TextTranslateViewModel.swift */; };
+		4773BB492818D97200BEF2F7 /* TranslateTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773BB482818D97200BEF2F7 /* TranslateTextView.swift */; };
 		478AFD862817DAD200A6EBEE /* XTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AFD852817DAD200A6EBEE /* XTranslator.swift */; };
 		478C0F2628188DD600183605 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478C0F2528188DD600183605 /* ToggleButton.swift */; };
 /* End PBXBuildFile section */
@@ -64,6 +71,9 @@
 		471AA5CD281707EB005F2582 /* ImageOCRViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOCRViewModel.swift; sourceTree = "<group>"; };
 		471AA5CF28170807005F2582 /* ImageFilterer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageFilterer.swift; sourceTree = "<group>"; };
 		471AA5D5281708CC005F2582 /* +UIIMage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "+UIIMage.swift"; sourceTree = "<group>"; };
+		473B1C362818B0C000D5A7B5 /* XDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDefaults.swift; sourceTree = "<group>"; };
+		473B1C3A2818B2BB00D5A7B5 /* LanguageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageBar.swift; sourceTree = "<group>"; };
+		473B1C3C2818B9E400D5A7B5 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		4747828F2816365F00B3B6C4 /* Myanmar_Lens_2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Myanmar_Lens_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		474782922816365F00B3B6C4 /* Myanmar_Lens_2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Myanmar_Lens_2App.swift; sourceTree = "<group>"; };
 		474782942816365F00B3B6C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,6 +118,10 @@
 		474783112816F3BB00B3B6C4 /* TranslateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateCell.swift; sourceTree = "<group>"; };
 		475C493A2818A3A000A20624 /* ImageOCR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageOCR.swift; sourceTree = "<group>"; };
 		476B1AAD28183BE1008537A9 /* CameraFrameService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFrameService.swift; sourceTree = "<group>"; };
+		4773BB412818C8D300BEF2F7 /* XCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCache.swift; sourceTree = "<group>"; };
+		4773BB442818D34400BEF2F7 /* TextTranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTranslateViewController.swift; sourceTree = "<group>"; };
+		4773BB462818D35400BEF2F7 /* TextTranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTranslateViewModel.swift; sourceTree = "<group>"; };
+		4773BB482818D97200BEF2F7 /* TranslateTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateTextView.swift; sourceTree = "<group>"; };
 		478AFD852817DAD200A6EBEE /* XTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XTranslator.swift; sourceTree = "<group>"; };
 		478AFD882817E7EA00A6EBEE /* Myanmar-Lens-2-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Myanmar-Lens-2-Info.plist"; sourceTree = "<group>"; };
 		478C0F2528188DD600183605 /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
@@ -145,6 +159,7 @@
 		474782912816365F00B3B6C4 /* Myanmar_Lens_2 */ = {
 			isa = PBXGroup;
 			children = (
+				4773BB432818D32300BEF2F7 /* TextTranslator */,
 				478AFD872817E68400A6EBEE /* Home */,
 				474782DB28163CB800B3B6C4 /* OCR */,
 				474782C828163BFF00B3B6C4 /* Quadrilateral */,
@@ -195,9 +210,12 @@
 		474782AE281637E600B3B6C4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				478AFD852817DAD200A6EBEE /* XTranslator.swift */,
 				474782AF281637F300B3B6C4 /* XFont.swift */,
 				474782B12816382D00B3B6C4 /* XIcon.swift */,
 				474782F5281643C800B3B6C4 /* AlertError.swift */,
+				473B1C362818B0C000D5A7B5 /* XDefaults.swift */,
+				4773BB412818C8D300BEF2F7 /* XCache.swift */,
 				474782E928163E1600B3B6C4 /* Views */,
 				474782B32816385600B3B6C4 /* Extensions */,
 			);
@@ -249,7 +267,6 @@
 				474782C628163BD600B3B6C4 /* StringTracker.swift */,
 				471AA5CF28170807005F2582 /* ImageFilterer.swift */,
 				471AA5D5281708CC005F2582 /* +UIIMage.swift */,
-				478AFD852817DAD200A6EBEE /* XTranslator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -322,9 +339,11 @@
 		474782E928163E1600B3B6C4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				473B1C3C2818B9E400D5A7B5 /* ImagePicker.swift */,
 				478C0F2528188DD600183605 /* ToggleButton.swift */,
 				474782EA28163E1F00B3B6C4 /* PickerNavigationView.swift */,
 				474782E028163DD400B3B6C4 /* ViewModifiers */,
+				473B1C3A2818B2BB00D5A7B5 /* LanguageBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -338,6 +357,16 @@
 				474782F3281643C800B3B6C4 /* PhotoCaptureProcessor.swift */,
 			);
 			path = CameraService;
+			sourceTree = "<group>";
+		};
+		4773BB432818D32300BEF2F7 /* TextTranslator */ = {
+			isa = PBXGroup;
+			children = (
+				4773BB442818D34400BEF2F7 /* TextTranslateViewController.swift */,
+				4773BB462818D35400BEF2F7 /* TextTranslateViewModel.swift */,
+				4773BB482818D97200BEF2F7 /* TranslateTextView.swift */,
+			);
+			path = TextTranslator;
 			sourceTree = "<group>";
 		};
 		478AFD822817B3C000A6EBEE /* TranslateOperations */ = {
@@ -452,15 +481,20 @@
 				47478306281652FA00B3B6C4 /* CameraOCRPreviewView.swift in Sources */,
 				474782D928163C6C00B3B6C4 /* CGImagePropertyOrientation.swift in Sources */,
 				474782CC28163BFF00B3B6C4 /* Quadrilateral.swift in Sources */,
+				4773BB422818C8D300BEF2F7 /* XCache.swift in Sources */,
+				473B1C3D2818B9E400D5A7B5 /* ImagePicker.swift in Sources */,
 				474782FF281643C800B3B6C4 /* AlertError.swift in Sources */,
 				4747829F2816366100B3B6C4 /* Myanmar_Lens_2.xcdatamodeld in Sources */,
 				474782C028163BA300B3B6C4 /* ShapeLayer.swift in Sources */,
+				473B1C372818B0C000D5A7B5 /* XDefaults.swift in Sources */,
+				473B1C3B2818B2BB00D5A7B5 /* LanguageBar.swift in Sources */,
 				475C493B2818A3A000A20624 /* ImageOCR.swift in Sources */,
 				474782C728163BD600B3B6C4 /* StringTracker.swift in Sources */,
 				474782D128163C1B00B3B6C4 /* QuadrilateralView.swift in Sources */,
 				471AA5CE281707EB005F2582 /* ImageOCRViewModel.swift in Sources */,
 				474782B0281637F300B3B6C4 /* XFont.swift in Sources */,
 				474782932816365F00B3B6C4 /* Myanmar_Lens_2App.swift in Sources */,
+				4773BB452818D34400BEF2F7 /* TextTranslateViewController.swift in Sources */,
 				474782B22816382D00B3B6C4 /* XIcon.swift in Sources */,
 				476B1AAE28183BE1008537A9 /* CameraFrameService.swift in Sources */,
 				474782FD281643C800B3B6C4 /* PhotoCaptureProcessor.swift in Sources */,
@@ -474,8 +508,10 @@
 				4747830E2816A05100B3B6C4 /* ImageOCRViewController.swift in Sources */,
 				474782FA281643C800B3B6C4 /* CameraOCRViewModel.swift in Sources */,
 				4747830A2816790200B3B6C4 /* TranslateOperation.swift in Sources */,
+				4773BB492818D97200BEF2F7 /* TranslateTextView.swift in Sources */,
 				471AA5D6281708CC005F2582 /* +UIIMage.swift in Sources */,
 				474782C428163BB400B3B6C4 /* TextQuad.swift in Sources */,
+				4773BB472818D35400BEF2F7 /* TextTranslateViewModel.swift in Sources */,
 				474782C128163BA300B3B6C4 /* TextLayer.swift in Sources */,
 				4747830428164B1400B3B6C4 /* CameraOCR.swift in Sources */,
 				4747830C28167A6A00B3B6C4 /* TranslateOperationGroup.swift in Sources */,
