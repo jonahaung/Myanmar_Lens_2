@@ -11,10 +11,23 @@ import UIKit
 
 final class CameraOCRViewModel: ObservableObject {
     
+    
+    
     private let cameraService = CameraService()
     private let frameService = CameraFrameService()
     private let ocr = CameraOCR()
     
+    enum LiveOcrType: String, Identifiable, Hashable, CaseIterable {
+        var id: String { rawValue }
+        case Google, Apple
+    }
+    @Published var liveOcrType = LiveOcrType.Apple {
+        willSet {
+            ocr.set(false)
+            ocr.view?.quadView.setActive(isActive: newValue == .Apple)
+            ocr.set(true)
+        }
+    }
     @Published var capturedImage: UIImage?
     @Published var isFlashOn = false
     @Published var willCapturePhoto = false
@@ -22,13 +35,9 @@ final class CameraOCRViewModel: ObservableObject {
     @Published var videoOutputActive = false
     @Published var alertError: AlertError?
     @Published var progress: CGFloat = 0
-    
-    var liveTranslatorAvilible: Bool { XDefaults.shared.soruceLanguage != .burmese }
-    
-    var session: AVCaptureSession
-    
+
+    let session: AVCaptureSession
     private var subscriptions = Set<AnyCancellable>()
-    
     init() {
         self.session = cameraService.session
         
@@ -53,12 +62,17 @@ final class CameraOCRViewModel: ObservableObject {
             .sink { [weak self]  value in
                 self?.videoOutputActive = value
                 self?.ocr.set(value)
+                self?.ocr.view?.quadView.setActive(isActive: value && self?.liveOcrType == .Apple)
             }
             .store(in: &subscriptions)
         frameService.$current
             .compactMap{$0}
             .sink { [weak self] (buffer) in
-                self?.ocr.detectText(buffer: buffer)
+                if self?.liveOcrType == .Google {
+                    self?.ocr.detectGoogle(sampleBuffer: buffer)
+                } else {
+                    self?.ocr.detectText(buffer: buffer)
+                }
             }
             .store(in: &subscriptions)
         ocr.$progress
@@ -79,27 +93,22 @@ final class CameraOCRViewModel: ObservableObject {
         cameraService.configure()
     }
     
-    func handleCapture() {
+    @MainActor func handleCapture() {
         if videoOutputActive {
             if session.isRunning {
                 cameraService.stop {
                     DispatchQueue.main.async {
-                        self.progress = 1
-                        self.captureFrame()
+                        
                     }
                 }
             } else {
+                progress = 0
+                ocr.clear()
                 cameraService.start()
-                DispatchQueue.main.async {
-                    self.progress = 0
-                }
             }
-        }else {
+        } else {
             cameraService.capturePhoto()
         }
-    }
-    func captureFrame() {
-        capturedImage = ocr.createCurrentImage()
     }
     
     func flipCamera() {
@@ -116,13 +125,14 @@ final class CameraOCRViewModel: ObservableObject {
     
     func toggleActiveTextRecognizer() {
         cameraService.setSampleBufferDelegate(delegate: videoOutputActive ? nil : frameService, queue: videoOutputActive ? .init(label: "") : frameService.queue)
+        cameraService.start()
     }
     
-    func stop() {
+    func stopSession() {
         cameraService.stop()
     }
-    func start() {
     
+    func startSession() {
         cameraService.start()
     }
     

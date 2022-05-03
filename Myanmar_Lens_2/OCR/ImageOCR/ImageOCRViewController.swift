@@ -32,6 +32,7 @@ struct ImageOCRViewController: View {
             .padding()
             .accentColor(.white)
         }
+        .statusBar(hidden: true)
         .task {
             viewModel.task()
         }
@@ -40,6 +41,7 @@ struct ImageOCRViewController: View {
                 alertError.primaryAction?()
             }))
         }
+        .activitySheet($viewModel.activityItem)
     }
     
     private func topmBar() -> some View {
@@ -48,8 +50,20 @@ struct ImageOCRViewController: View {
                 dismiss()
             } label: {
                 XIcon(.power)
-            }
+            }.accentColor(.brown)
+
             Spacer()
+            
+            Menu {
+                Button("Share Text", role: .none) {
+                    viewModel.activityItem = .init(items: UIPasteboard.general.string.str)
+                }
+                Button("Share Image", role: .none) {
+                    viewModel.activityItem = .init(items: viewModel.image)
+                }
+            } label: {
+                XIcon(.square_and_arrow_up)
+            }
         }
     }
     
@@ -61,13 +75,11 @@ struct ImageOCRViewController: View {
                 }
                 .disabled(!viewModel.hasChanges)
             }
-            Button("Reset", role: .cancel) {
-                viewModel.crop()
-            }
+            
             Spacer()
             Menu {
                 ForEach(ImageFilterMode.allCases) { mode in
-                    Button(mode.description) {
+                    Button(mode.description, role: .none) {
                         viewModel.filter(mode)
                     }
                 }

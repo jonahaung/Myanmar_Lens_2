@@ -14,8 +14,8 @@ class XTranslator {
     static let shared = XTranslator()
     private let translator = Translator()
     
-    var soruceLanguage = XDefaults.shared.soruceLanguage
-    var targetLanguage = XDefaults.shared.targetLanguage
+    var soruceLanguage: NLLanguage { XDefaults.shared.soruceLanguage }
+    var targetLanguage: NLLanguage { XDefaults.shared.targetLanguage }
     
     private init() { }
     
@@ -28,19 +28,19 @@ class XTranslator {
         return await translator.translate(text: string, from: soruceLanguage, to: targetLanguage)
     }
     
-    func detectLanguage(string: String) {
-        var detectedLanguage = self.soruceLanguage
-        if let language = string.languageString, language != "und" && detectedLanguage.rawValue != language {
-            detectedLanguage = NLLanguage(rawValue: language)
-            XDefaults.shared.soruceLanguage = detectedLanguage
-            self.soruceLanguage = detectedLanguage
-        }
-        let to: NLLanguage = (detectedLanguage == targetLanguage) ? (targetLanguage == .burmese ? .english : .burmese ) : targetLanguage
-        if self.targetLanguage != to {
-            XDefaults.shared.targetLanguage = to
-            self.targetLanguage = to
-        }
-    }
+//    func detectLanguage(string: String) {
+//        var detectedLanguage = self.soruceLanguage
+//        if let language = string.languageString, language != "und" && detectedLanguage.rawValue != language {
+//            detectedLanguage = NLLanguage(rawValue: language)
+//            XDefaults.shared.soruceLanguage = detectedLanguage
+//            self.soruceLanguage = detectedLanguage
+//        }
+//        let to: NLLanguage = (detectedLanguage == targetLanguage) ? (targetLanguage == .burmese ? .english : .burmese ) : targetLanguage
+//        if self.targetLanguage != to {
+//            XDefaults.shared.targetLanguage = to
+//            self.targetLanguage = to
+//        }
+//    }
     
     func saveCache(source sourceString: String, target targetString: String) async {
         Translate.createIfNeeded(source: sourceString, sourceLanguage: soruceLanguage, target: targetString, targetLanguage: targetLanguage)
@@ -55,8 +55,8 @@ class XTranslator {
         }
     }
     
-    func updateLanguage() {
-        self.soruceLanguage = XDefaults.shared.soruceLanguage
-        self.targetLanguage = XDefaults.shared.targetLanguage
-    }
+//    func updateLanguage() {
+//        self.soruceLanguage = XDefaults.shared.soruceLanguage
+//        self.targetLanguage = XDefaults.shared.targetLanguage
+//    }
 }

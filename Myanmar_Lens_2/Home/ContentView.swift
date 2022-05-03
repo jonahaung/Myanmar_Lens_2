@@ -8,34 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State private var items = [Translate]()
-    
     var body: some View {
-        List{
-            ForEach(items) { translate in
-                TranslateCell(translate: translate)
-            }
+        NavigationView {
+            TextTranslateViewController()
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(trailing: navBarTrailing())
         }
-        .navigationTitle("Myanamr Lens")
-        .navigationBarItems(trailing: navBarTrailing())
-        .refreshable {
-            items = Translate.all()
-        }
-        .task {
-            items = Translate.all()
-        }
-        
+        .navigationViewStyle(.stack)
     }
     
     func navBarTrailing() -> some View {
         HStack {
-            Button("Reset") {
-                Translate.deleteAll()
-            }
-            
-            Text("Text Translator")
-                .tapToPresent(TextTranslateViewController(), .FullScreen)
             XIcon(.camera_fill)
                 .tapToPresent(CameraOCRViewController(), .FullScreen)
         }

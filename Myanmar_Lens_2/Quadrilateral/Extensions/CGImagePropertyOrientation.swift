@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import CoreGraphics
+import VideoToolbox
 
 extension CGImagePropertyOrientation {
     init(_ uiOrientation: UIImage.Orientation) {
@@ -30,5 +32,21 @@ extension CGImagePropertyOrientation {
             assertionFailure("Unknow orientation, falling to default")
             self = .right
         }
+    }
+}
+
+
+extension CGImage {
+    static func create(from cvPixelBuffer: CVPixelBuffer?) -> CGImage? {
+        guard let pixelBuffer = cvPixelBuffer else {
+            return nil
+        }
+        
+        var image: CGImage?
+        VTCreateCGImageFromCVPixelBuffer(
+            pixelBuffer,
+            options: nil,
+            imageOut: &image)
+        return image
     }
 }

@@ -156,9 +156,9 @@ public class CameraService {
                 session.addOutput(videoOutput)
             }
             
-            // We want the buffers to be in portrait orientation otherwise they are
-            // rotated by 90 degrees. Need to set this _after_ addOutput()!
-            videoOutput.connection(with: AVMediaType.video)?.videoOrientation = .portrait
+//             We want the buffers to be in portrait orientation otherwise they are
+//             rotated by 90 degrees. Need to set this _after_ addOutput()!
+//            videoOutput.connection(with: AVMediaType.video)?.videoOrientation = .portrait
             
             // Based on code from https://github.com/dokun1/Lumina/
             let activeDimensions = CMVideoFormatDescriptionGetDimensions(videoDevice.activeFormat.formatDescription)
@@ -361,8 +361,6 @@ public class CameraService {
                 }
             }
         }
-        
-        
     }
     
     public func set(zoom: CGFloat){
@@ -450,7 +448,6 @@ public class CameraService {
             }
         }
     }
-    
     
     func resize(image: UIImage, targetWidth: CGFloat = 200) -> UIImage {
         let originalSize = image.size

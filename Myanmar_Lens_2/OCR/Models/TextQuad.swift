@@ -14,6 +14,7 @@ class TextQuad {
     private let shapeLayer: ShapeLayer
     var string: String
     let quad: Quadrilateral
+    private var image: UIImage?
     
     init(_ observation: VNRecognizedTextObservation,_ affineTransform: CGAffineTransform) {
         quad = Quadrilateral(observation).applying(affineTransform)
@@ -26,7 +27,7 @@ class TextQuad {
         self.quad = quad
         self.string = string
         shapeLayer = ShapeLayer(quad: quad)
-        textLayer = TextLayer(string: string, rect: quad.fittedRect)
+        textLayer = TextLayer(string: XCache.displayText(for: string), rect: quad.fittedRect)
     }
     
     func displayShapeLayer(in layer: CALayer) {
@@ -43,14 +44,45 @@ class TextQuad {
         textLayer.removeFromSuperlayer()
         shapeLayer.removeFromSuperlayer()
     }
+}
+
+// MyanmarOCR
+extension TextQuad {
     
-    func translated(_ translatedText: String) {
-        string = translatedText
+    func recognizeText() async {
+        guard let image = image else { return }
+        if let string = await MyanmarTextRecognizer.shared.detectTexts(from: image) {
+            self.string = string
+        }
     }
-    func displayUpdatedText() {
+}
+// Translate
+extension TextQuad {
+    
+    func translate() async {
+        let source = string.lowercased().trimmed
+        if let fetched = await XTranslator.shared.fetch(soruce: source) {
+            string = fetched
+        }
+    }
+    
+    @MainActor func displayTranslatedText() {
         let newLayer = TextLayer(string: string, rect: quad.fittedRect)
+        newLayer.backgroundColor = textLayer.backgroundColor
+        newLayer.foregroundColor = textLayer.foregroundColor
         textLayer.superlayer?.replaceSublayer(textLayer, with: newLayer)
         textLayer = newLayer
     }
 }
 
+extension TextQuad {
+    
+     func cropImage(originalImage: UIImage, imageViewSize: CGSize) {
+        let scaled = quad.scale(imageViewSize, originalImage.size)
+        self.image = ImageFilterer.crop(image: originalImage, to: scaled.regionRect)
+        if let colors = self.image?.getColors(quality: .low) {
+            shapeLayer.fillColor = colors.background.cgColor
+            textLayer.foregroundColor = colors.primary.cgColor
+        }
+    }
+}

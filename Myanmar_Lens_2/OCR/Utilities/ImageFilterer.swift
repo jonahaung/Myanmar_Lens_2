@@ -86,6 +86,20 @@ final class ImageFilterer {
         ])
         return filteredImage.uiImage
     }
+    
+    class func crop(image: UIImage, to rect: CGRect!) -> UIImage? {
+
+        let scaledRect = CGRect(x: rect.origin.x * image.scale, y: rect.origin.y * image.scale, width: rect.size.width * image.scale, height: rect.size.height * image.scale);
+
+
+        guard let imageRef: CGImage = image.cgImage?.cropping(to:scaledRect)
+        else {
+            return nil
+        }
+
+        let croppedImage: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
+        return croppedImage
+    }
 }
 
 extension CIImage {

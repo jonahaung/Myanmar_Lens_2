@@ -10,37 +10,55 @@ import SwiftUI
 struct TextTranslateViewController: View {
     
     @StateObject private var viewModel = TextTranslateViewModel()
-    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var xDefaults: XDefaults
+    
     var body: some View {
-        VStack {
-            topBar()
-            GeometryReader { geo in
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        Divider()
-                        VStack(alignment: .leading) {
-                            TranslateTextView.SwiftUIView(text: $viewModel.translated, isEditable: false, isScrollEnabled: true)
-                        }
-                        .frame(height: geo.size.height/2)
-                        Divider()
-                        VStack {
-                            TranslateTextView.SwiftUIView(text: $viewModel.text, isEditable: true, isScrollEnabled: true)
-                            
-                        }.frame(height: geo.size.height/2)
-                        Divider()
-                    }
+        GeometryReader { geo in
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 0) {
+                    Divider()
+                    TranslateTextView.SwiftUIView(text: $viewModel.translated, isEditable: false, isScrollEnabled: true)
+                        .frame(minHeight: geo.size.height/3)
+                        .padding(5)
+                        .overlay(outputTextViewOverlay())
+                    Divider()
+                    TranslateTextView.SwiftUIView(text: $viewModel.text, isEditable: true, isScrollEnabled: true)
+                        .frame(height: geo.size.height/3)
+                        .padding(5)
+                    Divider()
+                    menuBar()
                 }
             }
+            .navigationBarItems(leading:  LanguageBar().font(.callout))
         }
     }
     
-    private func topBar() -> some View {
+    private func menuBar() -> some View {
         HStack {
-            Button("Cancel") {
-                dismiss()
+            XIcon(.camera_viewfinder)
+                .tapToPresent(CameraOCRViewController(), .FullScreen)
+            XIcon(.doc_append)
+            XIcon(.photo_on_rectangle)
+        }
+        .padding()
+        .imageScale(.large)
+    }
+    private func outputTextViewOverlay() -> some View {
+        Group {
+            if viewModel.translated.isEmpty {
+                Text(xDefaults.targetLanguage.localized)
+                    .font(.system(size: 30, weight: .black, design: .rounded))
+                    .foregroundStyle(.tertiary)
             }
-            Spacer()
-            LanguageBar()
-        }.padding(.horizontal)
+        }
+    }
+    private func inputTextViewOverlay() -> some View {
+        Group {
+            if viewModel.text.isEmpty {
+                Text(xDefaults.soruceLanguage.localized)
+                    .font(.system(size: 30, weight: .black, design: .rounded))
+                    .foregroundStyle(.tertiary)
+            }
+        }
     }
 }

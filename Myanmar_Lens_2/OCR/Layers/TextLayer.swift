@@ -16,6 +16,7 @@ class TextLayer: CATextLayer {
     
     init(string: String, rect: CGRect) {
         super.init()
+        guard rect.isValid() else { return }
         let fontSize = rect.height * 0.7
         let font = UIFont(name: "MyanmarSansPro", size: fontSize)!
         let textSize = string.boundingRect(with: CGSize(width: .greatestFiniteMagnitude, height: 150.0), options: [.usesFontLeading], attributes: [.font: font], context: nil).size
@@ -26,10 +27,11 @@ class TextLayer: CATextLayer {
         self.contentsScale = UIScreen.main.scale
         self.alignmentMode = .justified
         self.isWrapped = true
-        self.backgroundColor = UIColor(white: 0.3, alpha: 0.5).cgColor
         self.frame.size = textSize
-        let xScale = (rect.width/textSize.width)
-        let yScale =  (rect.height/textSize.height)
+        
+        let xScale = min(5, (rect.width/textSize.width))
+        let yScale = min(5, (rect.height/textSize.height))
+        
         let scaleTransform = CGAffineTransform(scaleX: xScale, y: yScale)
         self.setAffineTransform(scaleTransform)
         self.frame.origin = rect.origin

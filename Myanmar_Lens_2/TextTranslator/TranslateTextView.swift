@@ -11,10 +11,11 @@ class TranslateTextView: UITextView {
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
+        backgroundColor = .clear
         showsVerticalScrollIndicator = false
         dataDetectorTypes = []
-        keyboardDismissMode = .interactive
-        bounces = true
+        keyboardDismissMode = .onDrag
+        bounces = false
         isSelectable = true
     }
     

@@ -64,6 +64,18 @@
 		4773BB492818D97200BEF2F7 /* TranslateTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4773BB482818D97200BEF2F7 /* TranslateTextView.swift */; };
 		478AFD862817DAD200A6EBEE /* XTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478AFD852817DAD200A6EBEE /* XTranslator.swift */; };
 		478C0F2628188DD600183605 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478C0F2528188DD600183605 /* ToggleButton.swift */; };
+		478DA3892820F1BC00ED09AE /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 478DA3882820F1BC00ED09AE /* tessdata */; };
+		478DA38B2820F1F300ED09AE /* MyanmarTextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA38A2820F1F300ED09AE /* MyanmarTextRecognizer.swift */; };
+		478DA38F282116DE00ED09AE /* +VNRecognizedTextObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA38E282116DD00ED09AE /* +VNRecognizedTextObservation.swift */; };
+		478DA393282137B800ED09AE /* ActivityItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA391282137B800ED09AE /* ActivityItem.swift */; };
+		478DA394282137B800ED09AE /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA392282137B800ED09AE /* ActivityView.swift */; };
+		478DA39628213FEE00ED09AE /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA39528213FEE00ED09AE /* MainTabView.swift */; };
+		478DA39A2821438E00ED09AE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA3992821438E00ED09AE /* HistoryView.swift */; };
+		478DA39C2821439B00ED09AE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA39B2821439B00ED09AE /* SettingsView.swift */; };
+		478DA39E2821442C00ED09AE /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA39D2821442C00ED09AE /* HistoryViewModel.swift */; };
+		478DA3A228215CFA00ED09AE /* UIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA3A128215CFA00ED09AE /* UIUtilities.swift */; };
+		47C667A22820931600AD427C /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C667A12820931600AD427C /* UIImageColors.swift */; };
+		CF8ACDBA0E43C1A5F4B8B1DA /* Pods_Myanmar_Lens_2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516DF5237AF99E81F5E76A73 /* Pods_Myanmar_Lens_2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,8 +135,22 @@
 		4773BB462818D35400BEF2F7 /* TextTranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTranslateViewModel.swift; sourceTree = "<group>"; };
 		4773BB482818D97200BEF2F7 /* TranslateTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateTextView.swift; sourceTree = "<group>"; };
 		478AFD852817DAD200A6EBEE /* XTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XTranslator.swift; sourceTree = "<group>"; };
-		478AFD882817E7EA00A6EBEE /* Myanmar-Lens-2-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Myanmar-Lens-2-Info.plist"; sourceTree = "<group>"; };
 		478C0F2528188DD600183605 /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		478DA3862820F15400ED09AE /* Myanmar-Lens-2-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Myanmar-Lens-2-Info.plist"; sourceTree = "<group>"; };
+		478DA3882820F1BC00ED09AE /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
+		478DA38A2820F1F300ED09AE /* MyanmarTextRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyanmarTextRecognizer.swift; sourceTree = "<group>"; };
+		478DA38E282116DD00ED09AE /* +VNRecognizedTextObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "+VNRecognizedTextObservation.swift"; sourceTree = "<group>"; };
+		478DA391282137B800ED09AE /* ActivityItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityItem.swift; sourceTree = "<group>"; };
+		478DA392282137B800ED09AE /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		478DA39528213FEE00ED09AE /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		478DA3992821438E00ED09AE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		478DA39B2821439B00ED09AE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		478DA39D2821442C00ED09AE /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
+		478DA3A128215CFA00ED09AE /* UIUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtilities.swift; sourceTree = "<group>"; };
+		47C667A12820931600AD427C /* UIImageColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageColors.swift; sourceTree = "<group>"; };
+		516DF5237AF99E81F5E76A73 /* Pods_Myanmar_Lens_2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Myanmar_Lens_2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C6D3525963091A140B7DC15 /* Pods-Myanmar_Lens_2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Myanmar_Lens_2.debug.xcconfig"; path = "Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2.debug.xcconfig"; sourceTree = "<group>"; };
+		E8003E07CC69A9C76D5E5098 /* Pods-Myanmar_Lens_2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Myanmar_Lens_2.release.xcconfig"; path = "Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				474782AA2816379400B3B6C4 /* Translator in Frameworks */,
+				CF8ACDBA0E43C1A5F4B8B1DA /* Pods_Myanmar_Lens_2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,8 +170,10 @@
 			isa = PBXGroup;
 			children = (
 				474782912816365F00B3B6C4 /* Myanmar_Lens_2 */,
-				478AFD882817E7EA00A6EBEE /* Myanmar-Lens-2-Info.plist */,
+				478DA3862820F15400ED09AE /* Myanmar-Lens-2-Info.plist */,
 				474782902816365F00B3B6C4 /* Products */,
+				77D33FEAE5FA446BD6387595 /* Pods */,
+				7C60AC4DCB06B2F4BC637325 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -159,6 +188,9 @@
 		474782912816365F00B3B6C4 /* Myanmar_Lens_2 */ = {
 			isa = PBXGroup;
 			children = (
+				478DA3982821437F00ED09AE /* Settings */,
+				478DA3972821437600ED09AE /* History */,
+				478DA3882820F1BC00ED09AE /* tessdata */,
 				4773BB432818D32300BEF2F7 /* TextTranslator */,
 				478AFD872817E68400A6EBEE /* Home */,
 				474782DB28163CB800B3B6C4 /* OCR */,
@@ -203,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				474782922816365F00B3B6C4 /* Myanmar_Lens_2App.swift */,
+				478DA39528213FEE00ED09AE /* MainTabView.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -263,10 +296,13 @@
 		474782C528163BC800B3B6C4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				478DA3A128215CFA00ED09AE /* UIUtilities.swift */,
+				478DA38A2820F1F300ED09AE /* MyanmarTextRecognizer.swift */,
 				478AFD822817B3C000A6EBEE /* TranslateOperations */,
 				474782C628163BD600B3B6C4 /* StringTracker.swift */,
 				471AA5CF28170807005F2582 /* ImageFilterer.swift */,
 				471AA5D5281708CC005F2582 /* +UIIMage.swift */,
+				47C667A12820931600AD427C /* UIImageColors.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -298,6 +334,7 @@
 				474782D528163C6C00B3B6C4 /* CGImagePropertyOrientation.swift */,
 				474782D328163C6C00B3B6C4 /* CGPoint+Utils.swift */,
 				474782D428163C6C00B3B6C4 /* UIImage+Utils.swift */,
+				478DA38E282116DD00ED09AE /* +VNRecognizedTextObservation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -319,8 +356,8 @@
 			children = (
 				4747830D2816A05100B3B6C4 /* ImageOCRViewController.swift */,
 				471AA5CD281707EB005F2582 /* ImageOCRViewModel.swift */,
-				471AA5CB281707AE005F2582 /* ImageOCRView.swift */,
 				475C493A2818A3A000A20624 /* ImageOCR.swift */,
+				471AA5CB281707AE005F2582 /* ImageOCRView.swift */,
 			);
 			path = ImageOCR;
 			sourceTree = "<group>";
@@ -339,6 +376,7 @@
 		474782E928163E1600B3B6C4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				478DA390282137B800ED09AE /* ActivityView */,
 				473B1C3C2818B9E400D5A7B5 /* ImagePicker.swift */,
 				478C0F2528188DD600183605 /* ToggleButton.swift */,
 				474782EA28163E1F00B3B6C4 /* PickerNavigationView.swift */,
@@ -382,9 +420,52 @@
 			isa = PBXGroup;
 			children = (
 				474782942816365F00B3B6C4 /* ContentView.swift */,
-				474783112816F3BB00B3B6C4 /* TranslateCell.swift */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		478DA390282137B800ED09AE /* ActivityView */ = {
+			isa = PBXGroup;
+			children = (
+				478DA391282137B800ED09AE /* ActivityItem.swift */,
+				478DA392282137B800ED09AE /* ActivityView.swift */,
+			);
+			path = ActivityView;
+			sourceTree = "<group>";
+		};
+		478DA3972821437600ED09AE /* History */ = {
+			isa = PBXGroup;
+			children = (
+				478DA3992821438E00ED09AE /* HistoryView.swift */,
+				478DA39D2821442C00ED09AE /* HistoryViewModel.swift */,
+				474783112816F3BB00B3B6C4 /* TranslateCell.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		478DA3982821437F00ED09AE /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				478DA39B2821439B00ED09AE /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		77D33FEAE5FA446BD6387595 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8C6D3525963091A140B7DC15 /* Pods-Myanmar_Lens_2.debug.xcconfig */,
+				E8003E07CC69A9C76D5E5098 /* Pods-Myanmar_Lens_2.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		7C60AC4DCB06B2F4BC637325 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				516DF5237AF99E81F5E76A73 /* Pods_Myanmar_Lens_2.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,9 +475,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 474782A22816366100B3B6C4 /* Build configuration list for PBXNativeTarget "Myanmar_Lens_2" */;
 			buildPhases = (
+				7D9CA7A850D56A920DCEB4B8 /* [CP] Check Pods Manifest.lock */,
 				4747828B2816365F00B3B6C4 /* Sources */,
 				4747828C2816365F00B3B6C4 /* Frameworks */,
 				4747828D2816365F00B3B6C4 /* Resources */,
+				AA76C877BEBF12877C225B81 /* [CP] Embed Pods Frameworks */,
+				49C68D3D94E892568080A5AF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -453,11 +537,71 @@
 			files = (
 				4747829A2816366100B3B6C4 /* Preview Assets.xcassets in Resources */,
 				474782972816366100B3B6C4 /* Assets.xcassets in Resources */,
+				478DA3892820F1BC00ED09AE /* tessdata in Resources */,
 				474782AC281637A200B3B6C4 /* MyanmarSansPro.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49C68D3D94E892568080A5AF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7D9CA7A850D56A920DCEB4B8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Myanmar_Lens_2-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA76C877BEBF12877C225B81 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4747828B2816365F00B3B6C4 /* Sources */ = {
@@ -469,6 +613,7 @@
 				478AFD862817DAD200A6EBEE /* XTranslator.swift in Sources */,
 				471AA5D028170807005F2582 /* ImageFilterer.swift in Sources */,
 				4747829C2816366100B3B6C4 /* Persistence.swift in Sources */,
+				478DA3A228215CFA00ED09AE /* UIUtilities.swift in Sources */,
 				474782D028163C1B00B3B6C4 /* EditScanCornerView.swift in Sources */,
 				474782D828163C6C00B3B6C4 /* UIImage+Utils.swift in Sources */,
 				474782EB28163E1F00B3B6C4 /* PickerNavigationView.swift in Sources */,
@@ -479,6 +624,7 @@
 				47478300281643C800B3B6C4 /* CameraOCRViewController.swift in Sources */,
 				474782DA28163C6C00B3B6C4 /* CGAffineTransform+Utils.swift in Sources */,
 				47478306281652FA00B3B6C4 /* CameraOCRPreviewView.swift in Sources */,
+				478DA39A2821438E00ED09AE /* HistoryView.swift in Sources */,
 				474782D928163C6C00B3B6C4 /* CGImagePropertyOrientation.swift in Sources */,
 				474782CC28163BFF00B3B6C4 /* Quadrilateral.swift in Sources */,
 				4773BB422818C8D300BEF2F7 /* XCache.swift in Sources */,
@@ -491,18 +637,23 @@
 				475C493B2818A3A000A20624 /* ImageOCR.swift in Sources */,
 				474782C728163BD600B3B6C4 /* StringTracker.swift in Sources */,
 				474782D128163C1B00B3B6C4 /* QuadrilateralView.swift in Sources */,
+				478DA39C2821439B00ED09AE /* SettingsView.swift in Sources */,
 				471AA5CE281707EB005F2582 /* ImageOCRViewModel.swift in Sources */,
 				474782B0281637F300B3B6C4 /* XFont.swift in Sources */,
 				474782932816365F00B3B6C4 /* Myanmar_Lens_2App.swift in Sources */,
 				4773BB452818D34400BEF2F7 /* TextTranslateViewController.swift in Sources */,
+				478DA38F282116DE00ED09AE /* +VNRecognizedTextObservation.swift in Sources */,
+				478DA394282137B800ED09AE /* ActivityView.swift in Sources */,
 				474782B22816382D00B3B6C4 /* XIcon.swift in Sources */,
 				476B1AAE28183BE1008537A9 /* CameraFrameService.swift in Sources */,
 				474782FD281643C800B3B6C4 /* PhotoCaptureProcessor.swift in Sources */,
 				474782CB28163BFF00B3B6C4 /* Transformable.swift in Sources */,
 				474782D728163C6C00B3B6C4 /* CGPoint+Utils.swift in Sources */,
 				474782E628163DD400B3B6C4 /* TapToPresentStyle.swift in Sources */,
+				478DA38B2820F1F300ED09AE /* MyanmarTextRecognizer.swift in Sources */,
 				474782F9281643C800B3B6C4 /* CameraService+Extensions.swift in Sources */,
 				474783082816731F00B3B6C4 /* +Translate.swift in Sources */,
+				47C667A22820931600AD427C /* UIImageColors.swift in Sources */,
 				47478302281643C800B3B6C4 /* CameraService.swift in Sources */,
 				474782E728163DD400B3B6C4 /* Size.swift in Sources */,
 				4747830E2816A05100B3B6C4 /* ImageOCRViewController.swift in Sources */,
@@ -512,11 +663,14 @@
 				471AA5D6281708CC005F2582 /* +UIIMage.swift in Sources */,
 				474782C428163BB400B3B6C4 /* TextQuad.swift in Sources */,
 				4773BB472818D35400BEF2F7 /* TextTranslateViewModel.swift in Sources */,
+				478DA39E2821442C00ED09AE /* HistoryViewModel.swift in Sources */,
 				474782C128163BA300B3B6C4 /* TextLayer.swift in Sources */,
 				4747830428164B1400B3B6C4 /* CameraOCR.swift in Sources */,
 				4747830C28167A6A00B3B6C4 /* TranslateOperationGroup.swift in Sources */,
+				478DA393282137B800ED09AE /* ActivityItem.swift in Sources */,
 				474782E828163DD400B3B6C4 /* TapToPushStyle.swift in Sources */,
 				474782FC281643C800B3B6C4 /* CameraService+Enums.swift in Sources */,
+				478DA39628213FEE00ED09AE /* MainTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -639,13 +793,14 @@
 		};
 		474782A32816366100B3B6C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C6D3525963091A140B7DC15 /* Pods-Myanmar_Lens_2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Myanmar_Lens_2/Preview Content\"";
-				DEVELOPMENT_TEAM = YYK4329T78;
+				DEVELOPMENT_TEAM = HJ9L53D9PB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Myanmar-Lens-2-Info.plist";
@@ -671,13 +826,14 @@
 		};
 		474782A42816366100B3B6C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8003E07CC69A9C76D5E5098 /* Pods-Myanmar_Lens_2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Myanmar_Lens_2/Preview Content\"";
-				DEVELOPMENT_TEAM = YYK4329T78;
+				DEVELOPMENT_TEAM = HJ9L53D9PB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Myanmar-Lens-2-Info.plist";

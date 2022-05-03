@@ -9,9 +9,12 @@ import UIKit
 
 class ShapeLayer: CAShapeLayer {
     
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
     init(quad: Quadrilateral) {
         super.init()
-        fillColor = UIColor(white: 0.2, alpha: 0.7).cgColor
+        fillColor = UIColor(white: 0.2, alpha: 0.9).cgColor
         path = quad.path.cgPath
     }
     

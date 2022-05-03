@@ -114,9 +114,10 @@ extension QuadrilateralView {
     private func draw(_ quad: Quadrilateral, animated: Bool) {
         let path = quad.path
         quadLineLayer.path = path.cgPath
-        let rectPath = UIBezierPath(rect: bounds)
-        rectPath.usesEvenOddFillRule = true
-        path.append(rectPath)
+//        let rectPath = UIBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 30), cornerRadius: 15)
+//        rectPath.usesEvenOddFillRule = true
+//        path.append(rectPath)
+//        quadLineLayer.path = path.cgPath
     }
 }
 

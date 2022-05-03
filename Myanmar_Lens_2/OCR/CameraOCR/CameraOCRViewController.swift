@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import NaturalLanguage
+import AVFoundation
 
 
 struct CameraOCRViewController: View {
+    
+    @AppStorage(XDefaults.Constants.soruceLanguage) var sourceLanguage: String = XDefaults.shared.soruceLanguage.rawValue
+    @AppStorage(XDefaults.Constants.targetLanguage) var targetLanguage: String = XDefaults.shared.targetLanguage.rawValue
     
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = CameraOCRViewModel()
@@ -20,7 +25,6 @@ struct CameraOCRViewController: View {
                 CameraOCRPreviewView.SwiftUIView(viewModel: viewModel)
                     .edgesIgnoringSafeArea(.all)
                     .gesture(dragGesture(reader: reader))
-                
                 flashBlackView()
                 VStack {
                     topBar()
@@ -55,11 +59,12 @@ struct CameraOCRViewController: View {
             if !viewModel.videoOutputActive {
                 HStack {
                     Button {
-                        viewModel.stop()
+                        viewModel.stopSession()
                         dismiss()
                     } label: {
                         XIcon(.power)
-                    }
+                    }.accentColor(.brown)
+                    
                     Spacer()
                     LanguageBar()
                     Spacer()
@@ -69,7 +74,6 @@ struct CameraOCRViewController: View {
                         ToggleImage($viewModel.isFlashOn, .bolt_fill, .bolt_slash_fill)
                     }
                 }
-                .transition(.scale)
             }
         }
     }
@@ -82,14 +86,23 @@ struct CameraOCRViewController: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                    .tapToPresent(ImageOCRViewController(image: image), .FullScreen)
+                    .tapToPresent(ImageOCRViewController(image: image).onAppear(perform: onAppearOCRImage).onDisappear(perform: onDisappearOCRImage), .FullScreen)
             } else {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 10)
                         .frame(width: 60, height: 60, alignment: .center)
                         .foregroundColor(.clear)
                     
-                    if !viewModel.videoOutputActive {
+                    if viewModel.videoOutputActive {
+                        Picker("OCR Type", selection: $viewModel.liveOcrType) {
+                            ForEach(CameraOCRViewModel.LiveOcrType.allCases) {
+                                Text($0.rawValue)
+                                    .tag($0)
+                            }
+                        }
+                        .labelsHidden()
+                        .pickerStyle(.menu)
+                    } else {
                         XIcon(.photo_on_rectangle)
                             .transition(.offset(x: -100))
                             .tapToPresent(SystemImagePicker(item: $viewModel.capturedImage))
@@ -106,8 +119,8 @@ struct CameraOCRViewController: View {
                     ZStack {
                         Circle()
                             .trim(from: 0.0, to: CGFloat(min(self.viewModel.progress, 1.0)))
-                            .stroke(style: StrokeStyle(lineWidth: 5.0, lineCap: .round, lineJoin: .round))
-                            .foregroundColor(.orange)
+                            .stroke(style: StrokeStyle(lineWidth: 6.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(.white)
                             .rotationEffect(Angle(degrees: 270.0))
                             .frame(width: 60, height: 60)
                         ToggleImage($viewModel.isCameraUnavailable, .play_fill, .pause_fill)
@@ -121,7 +134,7 @@ struct CameraOCRViewController: View {
                         .frame(width: 60, height: 60)
                         .transition(.scale)
                 }
-            }
+            }.zIndex(5)
             
             Spacer()
             
@@ -131,11 +144,19 @@ struct CameraOCRViewController: View {
                 XIcon(.a_magnify)
                     .font(.title)
             }
-            .accentColor(viewModel.videoOutputActive ? .white : .init(white: 0.4))
-            .disabled(!viewModel.liveTranslatorAvilible)
+            .accentColor(viewModel.videoOutputActive ? .orange : .white)
+            .disabled(sourceLanguage == NLLanguage.burmese.rawValue || sourceLanguage == targetLanguage)
         }
     }
     
+    private func onAppearOCRImage() {
+        viewModel.stopSession()
+        
+    }
+    private func onDisappearOCRImage() {
+        viewModel.startSession()
+        viewModel.capturedImage = nil
+    }
     private func dragGesture(reader: GeometryProxy) -> some Gesture {
         DragGesture().onChanged({ (val) in
             if abs(val.translation.height) > abs(val.translation.width) {

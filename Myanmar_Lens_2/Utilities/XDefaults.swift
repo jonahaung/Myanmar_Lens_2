@@ -27,8 +27,9 @@ class XDefaults: ObservableObject {
             return .english
         } set {
             userDefaults.set(newValue.rawValue, forKey: Constants.soruceLanguage)
-            XTranslator.shared.soruceLanguage = newValue
+            userDefaults.synchronize()
             XCache.clear()
+            objectWillChange.send()
         }
     }
     
@@ -40,8 +41,9 @@ class XDefaults: ObservableObject {
             return .burmese
         } set {
             userDefaults.set(newValue.rawValue, forKey: Constants.targetLanguage)
-            XTranslator.shared.targetLanguage = newValue
+            userDefaults.synchronize()
             XCache.clear()
+            objectWillChange.send()
         }
     }
 }

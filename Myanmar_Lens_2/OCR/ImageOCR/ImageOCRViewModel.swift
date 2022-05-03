@@ -11,12 +11,13 @@ import Combine
 
 class ImageOCRViewModel: ObservableObject {
     
-    private let image: UIImage
+    let image: UIImage
     
     private let ocr = ImageOCR()
     
     @Published var isTranslating = false
     @Published var alertError: AlertError?
+    @Published var activityItem: ActivityItem?
     
     
     init(image: UIImage) {
@@ -41,27 +42,25 @@ extension ImageOCRViewModel {
         ocr.view = view
     }
     
-    func task() {
+    @MainActor func task() {
         ocr.detectText()
     }
-
+    
     var hasChanges: Bool {
         image != ocr.view?.image
     }
     
-    func reset() {
+    @MainActor func reset() {
         ocr.view?.image = image
         objectWillChange.send()
         ocr.detectText()
     }
     
-    func filter(_ mode: ImageFilterMode) {
+    @MainActor func filter(_ mode: ImageFilterMode) {
         guard let editedImage = ocr.view?.image else { return }
         ocr.view?.image = ImageFilterer.filter(for: editedImage, with: mode)
         objectWillChange.send()
         ocr.detectText()
     }
-    func crop() {
-        
-    }
+    
 }

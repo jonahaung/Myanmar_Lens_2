@@ -3,10 +3,11 @@
     <entity name="Translate" representedClassName="Translate" syncable="YES" codeGenerationType="class">
         <attribute name="from" attributeType="String"/>
         <attribute name="fromLanguage" attributeType="String"/>
+        <attribute name="isFavourite" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="to" optional="YES" attributeType="String"/>
         <attribute name="toLanguage" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Translate" positionX="-63" positionY="-18" width="128" height="89"/>
+        <element name="Translate" positionX="-63" positionY="-18" width="128" height="104"/>
     </elements>
 </model>

@@ -11,11 +11,7 @@ struct Myanmar_Lens_2App: App {
    
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                ContentView()
-            }
-            .navigationViewStyle(.stack)
-            .environmentObject(XDefaults.shared)
+            MainTabView()
         }
     }
 }

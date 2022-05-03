@@ -7,15 +7,15 @@
 
 import Foundation
 import Vision
+import UIKit
 
 final class ImageOCR {
     
-    weak var view: ImageOCRView?
-    private var textQuads = [TextQuad]()
-    private var textRequest: VNRecognizeTextRequest
-    
     @Published var alertError: AlertError?
     @Published var isTranslating = false
+    
+    weak var view: ImageOCRView?
+    private let textRequest: VNRecognizeTextRequest
     
     init() {
         textRequest = VNRecognizeTextRequest()
@@ -23,7 +23,7 @@ final class ImageOCR {
         textRequest.usesLanguageCorrection = true
     }
     
-    func detectText() {
+    @MainActor func detectText() {
         guard let buffer = view?.image?.pixelBuffer() else { return }
         let handler = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .up, options: [:])
         do {
@@ -34,58 +34,76 @@ final class ImageOCR {
         }
     }
     
-    private func handleResults() {
-        if let results = textRequest.results  {
-            if results.isEmpty {
-                alertError = .init(title: "No texts detected")
-                return
-            }
-            createTextQuads(results: results)
+    @MainActor private func handleResults() {
+        guard let results = textRequest.results else { return }
+        if results.isEmpty {
+            alertError = .init(title: "No texts detected")
+            return
+        }
+        guard let view = view, let image = view.image else { return }
+        let affineTransform = view.textsAffineTransform()
+        
+        
+        let textQuads = results.map{ TextQuad($0, affineTransform )}
+        
+        let imageViewSize = view.imageView.frame.size
+        textQuads.forEach{ $0.cropImage(originalImage: image, imageViewSize: imageViewSize)}
+        
+        if XDefaults.shared.soruceLanguage == .burmese {
+            handleBurmeseOCR(textQuads: textQuads)
+        } else {
+            handleEnglishOCR(textQuads: textQuads)
         }
     }
     
-    private func createTextQuads(results: [VNRecognizedTextObservation]) {
-        if let affineTransform = view?.textsAffineTransform() {
-            let textQuads = results.map{ TextQuad($0, affineTransform )}
-            view?.display(textQuads: textQuads)
-            clear()
-            self.textQuads = textQuads
-            translate()
+    @MainActor private func handleBurmeseOCR(textQuads: [TextQuad]) {
+        guard let view = view else {
+            return
         }
-    }
-    
-    private func clear() {
-        textQuads.forEach { $0.remove() }
-        textQuads.removeAll()
-    }
-    
-    func translate() {
         isTranslating = true
         Task(priority: .userInitiated) { [weak self] in
             guard let self = self else { return }
-            await translate(textQuads: self.textQuads)
-            DispatchQueue.main.async {
-                self.isTranslating = false
-                self.textQuads.forEach{ $0.displayUpdatedText() }
-                
-            }
+            await recognizeText(textQuads: textQuads)
+            view.display(textQuads: textQuads)
+            textQuads.forEach{ $0.displayTranslatedText() }
+            await translate(textQuads: textQuads)
+            textQuads.forEach{ $0.displayTranslatedText() }
+            self.isTranslating = false
+        }
+    }
+    @MainActor private func handleEnglishOCR(textQuads: [TextQuad]) {
+        guard let view = view else {
+            return
+        }
+        view.display(textQuads: textQuads)
+        isTranslating = true
+        Task(priority: .userInitiated) { [weak self] in
+            guard let self = self else { return }
+            await translate(textQuads: textQuads)
+            textQuads.forEach{ $0.displayTranslatedText() }
+            self.isTranslating = false
         }
     }
     
+    
+    private func recognizeText(textQuads: [TextQuad]) async {
+        return await withTaskGroup(of: Void.self) { group in
+            for each in textQuads {
+                group.addTask {
+                    await each.recognizeText()
+                }
+            }
+        }
+    }
     private func translate(textQuads: [TextQuad]) async {
         return await withTaskGroup(of: Void.self) { group in
             for each in textQuads {
                 group.addTask {
-                    let source = each.string.lowercased().trimmed
-                    if let cached = await XTranslator.shared.cached(source: source) {
-                        each.translated(cached)
-                    }
-                    if let fetched = await XTranslator.shared.fetch(soruce: source) {
-                        await XTranslator.shared.saveCache(source: source, target: fetched)
-                        each.translated(fetched)
-                    }
+                    await each.translate()
                 }
             }
         }
     }
 }
+
+

@@ -11,7 +11,7 @@ import AVFoundation
 class CameraOCRPreviewView: UIView {
     
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
-    private var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
+    var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
     let quadView: QuadrilateralView = {
         $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return $0
@@ -22,7 +22,7 @@ class CameraOCRPreviewView: UIView {
             previewLayer.session = captureSession
         }
     }
-
+    
     private var previousPanPosition: CGPoint?
     private var closestCorner: CornerPosition?
     private var regionOfInterestTransform = CGAffineTransform.identity
@@ -99,7 +99,6 @@ extension CameraOCRPreviewView: UIGestureRecognizerDelegate {
     
     func setActive(isActive: Bool) {
         previewLayer.videoGravity = isActive ? .resizeAspectFill : .resizeAspect
-        quadView.setActive(isActive: isActive)
         self.isActive = isActive
         setNeedsLayout()
     }
@@ -128,18 +127,13 @@ import SwiftUI
 extension CameraOCRPreviewView {
     
     struct SwiftUIView: UIViewRepresentable {
-        
         let viewModel: CameraOCRViewModel
-        
         func makeUIView(context: Context) -> CameraOCRPreviewView {
             let view = CameraOCRPreviewView()
             view.captureSession = viewModel.session
             viewModel.configure(view: view)
             return view
         }
-        
-        func updateUIView(_ uiView: CameraOCRPreviewView, context: Context) {
-            
-        }
+        func updateUIView(_ uiView: CameraOCRPreviewView, context: Context) {}
     }
 }

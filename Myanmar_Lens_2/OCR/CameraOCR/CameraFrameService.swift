@@ -3,10 +3,9 @@ import AVFoundation
 
 class CameraFrameService: NSObject, ObservableObject {
     
-    @Published var current: CVPixelBuffer?
+    @Published var current: CMSampleBuffer?
     private var lastTimestamp = CMTime()
-    var fps = 10
-    
+    var fps = 15
     let queue = DispatchQueue(
         label: "com.jonahaung.FrameService",
         qos: .userInitiated,
@@ -21,7 +20,7 @@ extension CameraFrameService: AVCaptureVideoDataOutputSampleBufferDelegate {
         let deltaTime = timestamp - self.lastTimestamp
         if  deltaTime >= CMTimeMake(value: 1, timescale: Int32(self.fps)) {
             lastTimestamp = timestamp
-            self.current = sampleBuffer.imageBuffer
+            self.current = sampleBuffer
         }
     }
 }

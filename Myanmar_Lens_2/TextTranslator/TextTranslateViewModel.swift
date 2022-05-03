@@ -12,14 +12,14 @@ final class TextTranslateViewModel: ObservableObject {
     
     @Published var text = ""
     
-    @Published var translated = "..."
+    @Published var translated = ""
     
     private var subscriptions = Set<AnyCancellable>()
     
     init() {
         $text
             .removeDuplicates()
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(2), scheduler: DispatchQueue.main)
             .filter{ $0.count > 0 }
             .sink { [weak self] text in
                 self?.translate(string: text)
@@ -29,7 +29,7 @@ final class TextTranslateViewModel: ObservableObject {
     
     private func translate(string: String) {
         guard string == self.text else { return }
-        XTranslator.shared.detectLanguage(string: string)
+//        XTranslator.shared.detectLanguage(string: string)
         Task {
             if let text = await XTranslator.shared.fetch(soruce: string) {
                 await displayTranslatedText(text)
