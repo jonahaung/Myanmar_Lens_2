@@ -100,6 +100,15 @@ final class ImageFilterer {
         let croppedImage: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
         return croppedImage
     }
+    
+    class func resize(image: UIImage, targetWidth: CGFloat = 200) -> UIImage {
+        let originalSize = image.size
+        let targetSize = CGSize(width: targetWidth, height: targetWidth*originalSize.height/originalSize.width)
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        return renderer.image { (context) in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
+        }
+    }
 }
 
 extension CIImage {

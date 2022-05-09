@@ -7,150 +7,117 @@
 
 import UIKit
 import Vision
+import MLKit
+import MLImage
 
 class CameraOCR {
     
     private let stringTracker = StringTracker()
     private let translateOperationGroup = TranslateOperationGroup()
-    private let context = CIContext()
-    weak var view: CameraOCRPreviewView?
-    private var textQuads = [TextQuad]()
-    private var isActive = false
-    private var textRequest: VNRecognizeTextRequest
+    private let textRequest: VNRecognizeTextRequest
     
+    weak var view: CameraOCRPreviewView?
     @Published var progress = CGFloat.zero
     @Published var alertError: AlertError?
-//    private var lastFrame: CMSampleBuffer?
+    private var lastFrame: CVImageBuffer?
     
     init() {
         textRequest = VNRecognizeTextRequest()
         textRequest.recognitionLevel = .accurate
-        textRequest.usesLanguageCorrection = true
+        textRequest.usesLanguageCorrection = false
     }
-    
-    func detectText(buffer: CMSampleBuffer) {
-        if let buffer = buffer.imageBuffer, let roi = view?.regionOfInterest {
-            textRequest.regionOfInterest = roi
-            let handler = VNImageRequestHandler(cvPixelBuffer: buffer, orientation: .right, options: [:])
-            do {
-                try handler.perform([textRequest])
-                self.handleResults()
-                
-            } catch {
-                self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
-            }
-        }
-    }
-    
-    private func handleResults() {
-        guard isActive else {
-            textRequest.cancel()
-            DispatchQueue.main.async {
-                self.clear()
-            }
-            return
-        }
-        guard var results = textRequest.results else { return }
-        results = results.filter{ $0.confidence >= 0.4 }
+}
+
+extension CameraOCR {
+    func set(_ isActive: Bool) {
+        progress = 0
+        view?.setActive(isActive: isActive)
+        stringTracker.reset()
         
-        if results.isEmpty {
-            textRequest.cancel()
-            
-            DispatchQueue.main.async {
-                self.clear()
-            }
-            return
-        }
-        let strings = results.map{ $0.string }
+    }
+}
+
+extension CameraOCR {
+    private func handleTextQuads(_ textQuads: [TextQuad]) {
+        let strings = textQuads.map{ $0.string }
         stringTracker.logFrame(strings: strings)
         if let stableString = stringTracker.getStableString() {
             stringTracker.reset(string: stableString)
             translateOperationGroup.addIfNeeded(stableString)
         }
-        let stableResults = results.filter { result in
+        let stableResults = textQuads.filter { result in
             return stringTracker.isCachedStable(result.string)
         }
-        guard !stableResults.isEmpty else {
-            DispatchQueue.main.async {
-                self.progress = 0
-                self.createTextQuads(results: results)
+        self.progress = CGFloat(stableResults.count) / CGFloat(textQuads.count)
+        self.view?.display(textQuads: textQuads)
+        
+    }
+    private func updatePreviewOverlayViewWithLastFrame() {
+        DispatchQueue.main.sync { [weak self] in
+            guard let self = self,
+                  let imageBuffer = self.lastFrame else { return }
+            view?.imageView.image = UIUtilities.createUIImage(from: imageBuffer, orientation: UIUtilities.imageOrientation())
+        }
+    }
+}
+//Vision
+extension CameraOCR {
+    func detectText(buffer: CMSampleBuffer) {
+        if let imageBuffer = buffer.imageBuffer, let regionOfInterest = view?.regionOfInterest {
+            lastFrame = imageBuffer
+            textRequest.regionOfInterest = regionOfInterest
+            let handler = VNImageRequestHandler(cvPixelBuffer: imageBuffer, orientation: .init(UIUtilities.imageOrientation()), options: [:])
+            do {
+                try handler.perform([textRequest])
+            } catch {
+                self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
+                return
             }
-            return
+            updatePreviewOverlayViewWithLastFrame()
+            guard var results = textRequest.results else { return }
+            results = results.filter{ $0.confidence >= 0.4 }
+            
+            if results.isEmpty {
+                textRequest.cancel()
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if let affineTransform = self.view?.textsAffineTransform() {
+                    let textQuads = results.map{ TextQuad($0, affineTransform )}
+                    self.handleTextQuads(textQuads)
+                }
+            }
         }
-        DispatchQueue.main.async {
-            self.progress = CGFloat(stableResults.count) / CGFloat(results.count)
-            self.createTextQuads(results: stableResults)
-        }
-    }
-    
-    private func createTextQuads(results: [VNRecognizedTextObservation]) {
-        if let affineTransform = view?.textsAffineTransform() {
-            let textQuads = results.map{ TextQuad($0, affineTransform )}
-            clear()
-            view?.display(textQuads: textQuads)
-            self.textQuads = textQuads
-        }
-    }
-    
-    func clear() {
-        textQuads.forEach { $0.remove() }
-        textQuads.removeAll()
-       
     }
 }
-
+// Google
 extension CameraOCR {
     
-     func set(_ isActive: Bool) {
-        
-        self.isActive = isActive
-         progress = 0
-         view?.setActive(isActive: isActive)
-         clear()
-         stringTracker.reset()
-        
-    }
-}
-
-import MLKit
-import MLImage
-
-extension CameraOCR {
-    
-    func detectGoogle(sampleBuffer: CMSampleBuffer) {
-        
-        guard let imageBuffer = sampleBuffer.imageBuffer else { return }
-        let visionImage = VisionImage(buffer: sampleBuffer)
+    func detectGoogle(buffer: CMSampleBuffer) {
+        guard let imageBuffer = buffer.imageBuffer else { return }
+        lastFrame = imageBuffer
+        let visionImage = VisionImage(buffer: buffer)
         let orientation = UIUtilities.imageOrientation(fromDevicePosition: .back)
         visionImage.orientation = orientation
         let imageWidth = CGFloat(CVPixelBufferGetWidth(imageBuffer))
         let imageHeight = CGFloat(CVPixelBufferGetHeight(imageBuffer))
-        recognizeText(in: visionImage, width: imageWidth, height: imageHeight)
-    }
-    
-    private func recognizeText(in image: VisionImage, width: CGFloat, height: CGFloat) {
-        var recognizedText: Text
+        
+        let recognizedText: Text
         do {
-            recognizedText = try TextRecognizer.textRecognizer().results(in: image)
+            recognizedText = try TextRecognizer.textRecognizer(options: TextRecognizerOptions.init()).results(in: visionImage)
         } catch {
-            print(error)
+            self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
             return
         }
+        updatePreviewOverlayViewWithLastFrame()
         
-        weak var weakSelf = self
-        DispatchQueue.main.sync {
-            guard let strongSelf = weakSelf else {
-                print("Self is nil!")
-                return
-            }
-            guard strongSelf.isActive && !recognizedText.blocks.isEmpty else {
-                strongSelf.clear()
-                return
-            }
+        DispatchQueue.main.sync { [weak self] in
+            guard let self = self else { return }
             var textQuads = [TextQuad]()
             for block in recognizedText.blocks {
                 for line in block.lines {
-                    if let points = strongSelf.convertedPoints(from: line.cornerPoints, width: width, height: height) {
+                    if let points = self.convertedPoints(from: line.cornerPoints, width: imageWidth, height: imageHeight) {
                         var quad = Quadrilateral(points)
                         quad.reorganize()
                         let textQuad = TextQuad(quad, line.text)
@@ -158,67 +125,15 @@ extension CameraOCR {
                     }
                 }
             }
-            
-            let strings = textQuads.map{ $0.string }
-            stringTracker.logFrame(strings: strings)
-            if let stableString = stringTracker.getStableString() {
-                stringTracker.reset(string: stableString)
-                translateOperationGroup.addIfNeeded(stableString)
-            }
-            let stableResults = textQuads.filter { result in
-                return stringTracker.isCachedStable(result.string)
-            }
-            strongSelf.clear()
-            guard !stableResults.isEmpty else {
-                strongSelf.progress = 0
-                strongSelf.view?.display(textQuads: textQuads)
-                strongSelf.textQuads = textQuads
-                return
-            }
-            strongSelf.progress = CGFloat(stableResults.count) / CGFloat(textQuads.count)
-            strongSelf.view?.display(textQuads: textQuads)
-            strongSelf.textQuads = textQuads
+            handleTextQuads(textQuads)
         }
-        
     }
     
-    private func convertedPoints(
-        from points: [NSValue]?,
-        width: CGFloat,
-        height: CGFloat
-    ) -> [CGPoint]? {
+    private func convertedPoints(from points: [NSValue]?, width: CGFloat, height: CGFloat) -> [CGPoint]? {
         return points?.map {
             let cgPointValue = $0.cgPointValue
             let normalizedPoint = CGPoint(x: cgPointValue.x / width, y: cgPointValue.y / height)
-            let cgPoint = view!.previewLayer.layerPointConverted(fromCaptureDevicePoint: normalizedPoint)
-
-            return cgPoint
+            return view?.previewLayer.layerPointConverted(fromCaptureDevicePoint: normalizedPoint) ?? .zero
         }
     }
-    
-//    private func updatePreviewOverlayViewWithLastFrame() {
-//        weak var weakSelf = self
-//        DispatchQueue.main.sync {
-//            guard let strongSelf = weakSelf else {
-//                print("Self is nil!")
-//                return
-//            }
-//            guard strongSelf.isActive else { return }
-//            guard let lastFrame = lastFrame,
-//                  let imageBuffer = CMSampleBufferGetImageBuffer(lastFrame)
-//            else {
-//                return
-//            }
-//            strongSelf.updatePreviewOverlayViewWithImageBuffer(imageBuffer)
-//        }
-//    }
-//
-//    private func updatePreviewOverlayViewWithImageBuffer(_ imageBuffer: CVImageBuffer?) {
-//        guard let imageBuffer = imageBuffer else {
-//            return
-//        }
-//        let orientation: UIImage.Orientation = .right
-//        let image = UIUtilities.createUIImage(from: imageBuffer, orientation: orientation)
-//        view?.previewOverlayView.image = image
-//    }
 }

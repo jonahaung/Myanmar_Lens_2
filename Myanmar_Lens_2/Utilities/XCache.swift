@@ -36,11 +36,10 @@ struct XCache {
     }
     
     static func displayText(for string: String) -> String {
-        let string = string.lowercased().trimmed
         if let x = Translation.translatePairs[string] {
             return x
         }
-        if let x = Translate.find(from: string, toLanguage: XTranslator.shared.targetLanguage) {
+        if let x = Translate.find(from: string, toLanguage: XDefaults.shared.targetLanguage) {
             Translation.translatePairs[string] = x
         }
         return string

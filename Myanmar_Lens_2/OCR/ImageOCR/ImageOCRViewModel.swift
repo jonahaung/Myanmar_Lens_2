@@ -19,9 +19,9 @@ class ImageOCRViewModel: ObservableObject {
     @Published var alertError: AlertError?
     @Published var activityItem: ActivityItem?
     
-    
     init(image: UIImage) {
-        self.image = image
+        self.image = ImageFilterer.resize(image: image)
+        
         ocr.$isTranslating
             .receive(on: RunLoop.main)
             .assign(to: &$isTranslating)

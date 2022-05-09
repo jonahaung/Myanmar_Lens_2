@@ -49,8 +49,8 @@ struct ImageOCRViewController: View {
             Button {
                 dismiss()
             } label: {
-                XIcon(.power)
-            }.accentColor(.brown)
+                Text("Close")
+            }
 
             Spacer()
             

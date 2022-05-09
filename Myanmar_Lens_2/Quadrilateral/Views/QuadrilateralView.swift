@@ -42,6 +42,7 @@ final class QuadrilateralView: UIView {
     }()
     
     private(set) var viewQuad = Quadrilateral(.zero)
+    private var cachedQuadRect: CGRect?
     
     public var isSquare = true
     
@@ -86,9 +87,8 @@ final class QuadrilateralView: UIView {
     
     func setActive(isActive: Bool) {
         quadLineLayer.lineWidth = isActive ? 3 : 0
-        let rect = isActive ? CGRect(x: 10, y: bounds.height/2 - 100, width: bounds.width - 20, height: 150) : bounds.insetBy(dx: 5, dy: 5)
-        let quad = Quadrilateral(rect)
-        drawQuadrilateral(quad: quad)
+        let rect = isActive ? cachedQuadRect != nil ? cachedQuadRect! : CGRect(x: 10, y: bounds.height/2 - 100, width: bounds.width - 20, height: 150) : bounds
+        drawQuadrilateral(quad: Quadrilateral(rect))
         let pathAnimation = CABasicAnimation(keyPath: "path")
         pathAnimation.duration = 0.4
         quadLineLayer.add(pathAnimation, forKey: "path")
@@ -101,6 +101,7 @@ final class QuadrilateralView: UIView {
 extension QuadrilateralView {
     
     func display(textQuads: [TextQuad]) {
+        quadLayer.sublayers?.forEach{ $0.removeFromSuperlayer() }
         textQuads.forEach{ $0.displayShapeLayer(in: quadLayer)}
         textQuads.forEach{ $0.displayTextLayer(in: quadLayer )}
     }
@@ -173,6 +174,7 @@ extension QuadrilateralView {
                              y: cornerView.frame.origin.y + (cornerView.frame.size.height - cornerViewSize.width) / 2.0)
         cornerView.frame = CGRect(origin: origin, size: cornerViewSize)
         cornerView.setNeedsDisplay()
+        cachedQuadRect = viewQuad.regionRect
     }
     
     private func validPoint(_ point: CGPoint, forCornerViewOfSize cornerViewSize: CGSize, inView view: UIView) -> CGPoint {

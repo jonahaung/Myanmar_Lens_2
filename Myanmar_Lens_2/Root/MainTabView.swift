@@ -10,7 +10,7 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            ContentView()
+            HomeView()
                 .tabItem {
                     XIcon(.music_note_house_fill)
                 }

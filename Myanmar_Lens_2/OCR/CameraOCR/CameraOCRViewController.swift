@@ -62,8 +62,8 @@ struct CameraOCRViewController: View {
                         viewModel.stopSession()
                         dismiss()
                     } label: {
-                        XIcon(.power)
-                    }.accentColor(.brown)
+                        Text("Close")
+                    }
                     
                     Spacer()
                     LanguageBar()

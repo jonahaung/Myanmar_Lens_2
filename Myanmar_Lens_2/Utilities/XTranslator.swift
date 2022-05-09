@@ -13,50 +13,32 @@ class XTranslator {
     
     static let shared = XTranslator()
     private let translator = Translator()
-    
-    var soruceLanguage: NLLanguage { XDefaults.shared.soruceLanguage }
-    var targetLanguage: NLLanguage { XDefaults.shared.targetLanguage }
-    
     private init() { }
     
-    func cached(source string: String) async -> String? {
-        Translate.find(from: string, toLanguage: targetLanguage)
-    }
-    
-    func fetch(soruce string: String) async -> String? {
-        
-        return await translator.translate(text: string, from: soruceLanguage, to: targetLanguage)
-    }
-    
-//    func detectLanguage(string: String) {
-//        var detectedLanguage = self.soruceLanguage
-//        if let language = string.languageString, language != "und" && detectedLanguage.rawValue != language {
-//            detectedLanguage = NLLanguage(rawValue: language)
-//            XDefaults.shared.soruceLanguage = detectedLanguage
-//            self.soruceLanguage = detectedLanguage
-//        }
-//        let to: NLLanguage = (detectedLanguage == targetLanguage) ? (targetLanguage == .burmese ? .english : .burmese ) : targetLanguage
-//        if self.targetLanguage != to {
-//            XDefaults.shared.targetLanguage = to
-//            self.targetLanguage = to
-//        }
-//    }
-    
-    func saveCache(source sourceString: String, target targetString: String) async {
-        Translate.createIfNeeded(source: sourceString, sourceLanguage: soruceLanguage, target: targetString, targetLanguage: targetLanguage)
+    func translate(soruce string: String) async -> String? {
+        let source = string.nlLanguage
+        if source == .undetermined {
+            return string
+        }
+        let target = XDefaults.shared.targetLanguage
+        if source == target {
+            return string
+        }
+        if let cached = Translate.find(from: string, toLanguage: target) {
+            return cached
+        }
+        if let fetched = await translator.translate(text: string, from: source, to: target) {
+            Translate.createIfNeeded(source: string, sourceLanguage: source, target: fetched, targetLanguage: target)
+            return fetched
+        }
+        return string
     }
     
     func save(souce string: String) async {
-        guard string.isWhitespace == false else { return }
-        if await cached(source: string) == nil {
-            if let translated = await fetch(soruce: string)?.lowercased().trimmed {
-                await saveCache(source: string, target: translated)
-            }
-        }
+        await _ = translate(soruce: string)
     }
-    
-//    func updateLanguage() {
-//        self.soruceLanguage = XDefaults.shared.soruceLanguage
-//        self.targetLanguage = XDefaults.shared.targetLanguage
-//    }
+}
+
+private extension String {
+    var nlLanguage: NLLanguage { NLLanguage(rawValue: self.languageString ?? "en")}
 }

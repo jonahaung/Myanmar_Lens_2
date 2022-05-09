@@ -39,10 +39,17 @@ class TextQuad {
         layer.addSublayer(textLayer)
         textLayer.setNeedsDisplay()
     }
-    
+    func updateBackgroundColor(color: UIColor) {
+        
+        shapeLayer.fillColor = color.cgColor
+        textLayer.foregroundColor = color.isLight ? UIColor.black.cgColor : UIColor.white.cgColor
+    }
     func remove() {
         textLayer.removeFromSuperlayer()
         shapeLayer.removeFromSuperlayer()
+    }
+    func update(quad: Quadrilateral) {
+        textLayer.frame.origin = quad.fittedRect.origin
     }
 }
 
@@ -60,8 +67,8 @@ extension TextQuad {
 extension TextQuad {
     
     func translate() async {
-        let source = string.lowercased().trimmed
-        if let fetched = await XTranslator.shared.fetch(soruce: source) {
+        let source = string
+        if let fetched = await XTranslator.shared.translate(soruce: source) {
             string = fetched
         }
     }
@@ -84,5 +91,12 @@ extension TextQuad {
             shapeLayer.fillColor = colors.background.cgColor
             textLayer.foregroundColor = colors.primary.cgColor
         }
+    }
+}
+extension UIColor {
+    var isLight: Bool {
+        var white: CGFloat = 0
+        getWhite(&white, alpha: nil)
+        return white > 0.5
     }
 }

@@ -7,15 +7,22 @@
 
 
 import AVFoundation
+import UIKit
 
 class CameraOCRPreviewView: UIView {
     
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
+    private var panGesture: UILongPressGestureRecognizer?
     var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
     let quadView: QuadrilateralView = {
         $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return $0
     }(QuadrilateralView())
+    
+    let imageView: UIImageView = {
+        $0.contentMode = .scaleAspectFill
+        return $0
+    }(UIImageView())
     
     var captureSession: AVCaptureSession? {
         didSet {
@@ -32,6 +39,7 @@ class CameraOCRPreviewView: UIView {
         super.init(frame: frame)
         backgroundColor = .black
         quadView.frame = bounds
+        addSubview(imageView)
         addSubview(quadView)
         setupGestureRecognizer()
     }
@@ -46,6 +54,7 @@ class CameraOCRPreviewView: UIView {
         let layerRectScaleTransform = CGAffineTransform(scaleX: layerRect.width, y: -layerRect.height)
         let layerRectTranslateTransform = CGAffineTransform(translationX: layerRect.minX, y: layerRect.maxY)
         regionOfInterestTransform = layerRectScaleTransform.concatenating(layerRectTranslateTransform)
+        imageView.frame = previewLayer.bounds
     }
     
     var regionOfInterest: CGRect {
@@ -56,21 +65,22 @@ class CameraOCRPreviewView: UIView {
 extension CameraOCRPreviewView: UIGestureRecognizerDelegate {
     
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard gestureRecognizer is UILongPressGestureRecognizer else {
+        guard gestureRecognizer == self.panGesture else {
             return super.gestureRecognizerShouldBegin(gestureRecognizer)
         }
         let location = gestureRecognizer.location(in: self)
-        return isActive && quadView.getQuadFrame().intersects(location.surroundingSquare(withSize: CGSize(width: 100, height: 100)))
+        return captureSession?.isRunning == true && isActive && quadView.getQuadFrame().intersects(location.surroundingSquare(withSize: CGSize(width: 100, height: 100))) && super.gestureRecognizerShouldBegin(gestureRecognizer)
     }
     
     private func setupGestureRecognizer() {
-        let panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        panGesture.minimumPressDuration = 0
-        panGesture.delegate = self
-        addGestureRecognizer(panGesture)
+        panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        panGesture?.minimumPressDuration = 0
+        panGesture?.delegate = self
+        addGestureRecognizer(panGesture!)
     }
     
     @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+        
         let drawnQuad = quadView.viewQuad
         switch gesture.state {
         case .began:
@@ -98,9 +108,13 @@ extension CameraOCRPreviewView: UIGestureRecognizerDelegate {
     }
     
     func setActive(isActive: Bool) {
+        
         previewLayer.videoGravity = isActive ? .resizeAspectFill : .resizeAspect
         self.isActive = isActive
+        imageView.isHidden = !isActive
         setNeedsLayout()
+        quadView.display(textQuads: [])
+        
     }
     
     func getQuadFrame() -> CGRect {
@@ -118,6 +132,8 @@ extension CameraOCRPreviewView {
     }
     
     func display(textQuads: [TextQuad]) {
+        let color = imageView.colorOfPoint(point: CGPoint(x: imageView.frame.midX, y: imageView.frame.midY))
+        textQuads.forEach{ $0.updateBackgroundColor(color: color )}
         quadView.display(textQuads: textQuads)
     }
 }

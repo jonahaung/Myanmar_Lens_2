@@ -5,7 +5,7 @@ class CameraFrameService: NSObject, ObservableObject {
     
     @Published var current: CMSampleBuffer?
     private var lastTimestamp = CMTime()
-    var fps = 15
+    var fps = 20
     let queue = DispatchQueue(
         label: "com.jonahaung.FrameService",
         qos: .userInitiated,

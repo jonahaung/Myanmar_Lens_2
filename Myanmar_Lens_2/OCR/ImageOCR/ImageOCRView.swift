@@ -46,16 +46,18 @@ class ImageOCRView: UIView {
         shapeLayer.frame = imageViewFrame
     }
     
-
+    private var beginningPoint: CGPoint?
+    
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
             shapeLayer.sublayers?.forEach{ $0.backgroundColor = nil }
+            beginningPoint = gesture.location(in: imageView)
         case .changed:
             let location = gesture.location(in: imageView)
-            guard let layers = shapeLayer.sublayers?.filter({ $0 is CATextLayer && $0.frame.contains(location)}) as? [CATextLayer] else { return }
-            layers.forEach { layer in
-                layer.backgroundColor = Constants.selectionColor
+            
+            if let beginningPoint = beginningPoint {
+                drawRect(start: beginningPoint, end: location)
             }
         case .ended:
             if let layers = shapeLayer.sublayers?.filter({ $0 is CATextLayer && $0.backgroundColor != nil }) as? [CATextLayer] {
@@ -65,17 +67,42 @@ class ImageOCRView: UIView {
                 }
                 UIPasteboard.general.string = text
             }
+            beginningPoint = nil
         default:
-            break
+            beginningPoint = nil
         }
+    }
+    
+    private func drawRect(start: CGPoint, end: CGPoint) {
+        let x = min(start.x, end.x)
+        let y = min(start.y, end.y)
+        let width = start.x > end.x ? start.x - end.x : end.x - start.x
+        let height = start.y > end.y ? start.y - end.y : end.y - start.y
+        let rect = CGRect(x: x, y: y, width: width, height: height)
+        let path = UIBezierPath(rect: rect)
+        shapeLayer.path = path.cgPath
+        
+        guard let layers = shapeLayer.sublayers?.filter({ $0 is CATextLayer && $0.frame.intersects(rect)}) as? [CATextLayer] else { return }
+        layers.forEach { layer in
+            layer.backgroundColor = Constants.selectionColor
+        }
+        
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        if let first = touches.first {
+        if beginningPoint == nil, let first = touches.first {
             let location = first.location(in: imageView)
-            if (shapeLayer.sublayers?.filter{ $0.frame.contains(location)})?.isEmpty == true {
-                shapeLayer.sublayers?.forEach{ $0.backgroundColor = nil }
+            if let layers = (shapeLayer.sublayers?.filter{ $0.frame.contains(location)}) as? [CATextLayer] {
+                if layers.isEmpty {
+                    shapeLayer.sublayers?.forEach{ $0.backgroundColor = nil }
+                    shapeLayer.path = nil
+                } else {
+                    layers.forEach { layer in
+                        layer.backgroundColor = layer.backgroundColor == nil ? Constants.selectionColor : nil
+                    }
+                }
             }
+            shapeLayer.path = nil
         }
     }
 }

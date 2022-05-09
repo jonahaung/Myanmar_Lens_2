@@ -17,14 +17,22 @@ struct TextTranslateViewController: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 0) {
                     Divider()
+        
                     TranslateTextView.SwiftUIView(text: $viewModel.translated, isEditable: false, isScrollEnabled: true)
                         .frame(minHeight: geo.size.height/3)
                         .padding(5)
                         .overlay(outputTextViewOverlay())
+                
                     Divider()
+                    
+                    Text(viewModel.sentiment)
+                        .foregroundColor(.blue)
+                        .font(.custom(XFont.MyanmarFont.MyanmarSansPro.rawValue, size: 20))
+                    
                     TranslateTextView.SwiftUIView(text: $viewModel.text, isEditable: true, isScrollEnabled: true)
                         .frame(height: geo.size.height/3)
                         .padding(5)
+                    
                     Divider()
                     menuBar()
                 }

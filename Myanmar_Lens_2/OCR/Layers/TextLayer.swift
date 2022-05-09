@@ -20,7 +20,7 @@ class TextLayer: CATextLayer {
         let fontSize = rect.height * 0.7
         let font = UIFont(name: "MyanmarSansPro", size: fontSize)!
         let textSize = string.boundingRect(with: CGSize(width: .greatestFiniteMagnitude, height: 150.0), options: [.usesFontLeading], attributes: [.font: font], context: nil).size
-        
+        foregroundColor = UIColor.darkText.cgColor
         self.string = string
         self.fontSize = fontSize
         self.font = font

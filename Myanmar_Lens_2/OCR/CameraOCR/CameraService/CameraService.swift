@@ -24,7 +24,6 @@ public class CameraService {
     @Published public var videoOutputActive = false
     @Published public var alertError: AlertError?
     
-    
     public let session = AVCaptureSession()
     private var isSessionRunning = false
     private var isConfigured = false
@@ -422,7 +421,7 @@ public class CameraService {
                 }, completionHandler: { [weak self] (photoCaptureProcessor) in
                     // When the capture is complete, remove a reference to the photo capture delegate so it can be deallocated.
                     if let data = photoCaptureProcessor.photoData {
-                        self?.capturedImage = self?.resize(image: UIImage(data: data)!)
+                        self?.capturedImage = UIImage(data: data)
                         print("passing photo")
                     } else {
                         print("No photo data")
@@ -449,12 +448,5 @@ public class CameraService {
         }
     }
     
-    func resize(image: UIImage, targetWidth: CGFloat = 200) -> UIImage {
-        let originalSize = image.size
-        let targetSize = CGSize(width: targetWidth, height: targetWidth*originalSize.height/originalSize.width)
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
-        return renderer.image { (context) in
-            image.draw(in: CGRect(origin: .zero, size: targetSize))
-        }
-    }
+    
 }

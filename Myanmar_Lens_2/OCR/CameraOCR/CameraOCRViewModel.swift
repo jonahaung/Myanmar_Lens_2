@@ -69,7 +69,7 @@ final class CameraOCRViewModel: ObservableObject {
             .compactMap{$0}
             .sink { [weak self] (buffer) in
                 if self?.liveOcrType == .Google {
-                    self?.ocr.detectGoogle(sampleBuffer: buffer)
+                    self?.ocr.detectGoogle(buffer: buffer)
                 } else {
                     self?.ocr.detectText(buffer: buffer)
                 }
@@ -96,14 +96,10 @@ final class CameraOCRViewModel: ObservableObject {
     @MainActor func handleCapture() {
         if videoOutputActive {
             if session.isRunning {
-                cameraService.stop {
-                    DispatchQueue.main.async {
-                        
-                    }
-                }
+                cameraService.stop()
             } else {
                 progress = 0
-                ocr.clear()
+               
                 cameraService.start()
             }
         } else {
