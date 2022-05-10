@@ -24,11 +24,11 @@ class XTranslator {
         if source == target {
             return string
         }
-        if let cached = Translate.find(from: string, toLanguage: target) {
-            return cached
-        }
+//        if let cached = Translate.find(from: string, toLanguage: target) {
+//            return cached
+//        }
         if let fetched = await translator.translate(text: string, from: source, to: target) {
-            Translate.createIfNeeded(source: string, sourceLanguage: source, target: fetched, targetLanguage: target)
+//            Translate.createIfNeeded(source: string, sourceLanguage: source, target: fetched, targetLanguage: target)
             return fetched
         }
         return string
@@ -36,6 +36,10 @@ class XTranslator {
     
     func save(souce string: String) async {
         await _ = translate(soruce: string)
+    }
+    
+    func save(text: String, sourceLanguage: NLLanguage, target: String, targetLanguage: NLLanguage) {
+        Translate.createIfNeeded(source: text, sourceLanguage: sourceLanguage, target: target, targetLanguage: targetLanguage)
     }
 }
 

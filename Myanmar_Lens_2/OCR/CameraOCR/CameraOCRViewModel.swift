@@ -11,30 +11,29 @@ import UIKit
 
 final class CameraOCRViewModel: ObservableObject {
     
-    
-    
     private let cameraService = CameraService()
-    private let frameService = CameraFrameService()
     private let ocr = CameraOCR()
     
-    enum LiveOcrType: String, Identifiable, Hashable, CaseIterable {
-        var id: String { rawValue }
-        case Google, Apple
-    }
-    @Published var liveOcrType = LiveOcrType.Apple {
+    
+    @Published var liveOcrType = CameraOCR.LiveOcrType.Apple {
         willSet {
-            ocr.set(false)
-            ocr.view?.quadView.setActive(isActive: newValue == .Apple)
-            ocr.set(true)
+            ocr.set(videoOutputActive, liveOcrType: newValue)
         }
     }
     @Published var capturedImage: UIImage?
+    @Published var pickedItem: PickedItem?
     @Published var isFlashOn = false
     @Published var willCapturePhoto = false
     @Published var isCameraUnavailable = true
     @Published var videoOutputActive = false
     @Published var alertError: AlertError?
     @Published var progress: CGFloat = 0
+    
+    let videoOutputQueue = DispatchQueue(
+        label: "com.jonahaung.FrameService",
+        qos: .userInitiated,
+        attributes: [],
+        autoreleaseFrequency: .workItem)
 
     let session: AVCaptureSession
     private var subscriptions = Set<AnyCancellable>()
@@ -43,6 +42,7 @@ final class CameraOCRViewModel: ObservableObject {
         
         cameraService.$capturedImage
             .receive(on: RunLoop.main)
+            .compactMap{$0}
             .assign(to: &$capturedImage)
         cameraService.$alertError
             .receive(on: RunLoop.main)
@@ -60,19 +60,9 @@ final class CameraOCRViewModel: ObservableObject {
         cameraService.$videoOutputActive
             .receive(on: RunLoop.main)
             .sink { [weak self]  value in
-                self?.videoOutputActive = value
-                self?.ocr.set(value)
-                self?.ocr.view?.quadView.setActive(isActive: value && self?.liveOcrType == .Apple)
-            }
-            .store(in: &subscriptions)
-        frameService.$current
-            .compactMap{$0}
-            .sink { [weak self] (buffer) in
-                if self?.liveOcrType == .Google {
-                    self?.ocr.detectGoogle(buffer: buffer)
-                } else {
-                    self?.ocr.detectText(buffer: buffer)
-                }
+                guard let self = self else { return }
+                self.videoOutputActive = value
+                self.ocr.set(value, liveOcrType: self.liveOcrType)
             }
             .store(in: &subscriptions)
         ocr.$progress
@@ -120,8 +110,7 @@ final class CameraOCRViewModel: ObservableObject {
     }
     
     func toggleActiveTextRecognizer() {
-        cameraService.setSampleBufferDelegate(delegate: videoOutputActive ? nil : frameService, queue: videoOutputActive ? .init(label: "") : frameService.queue)
-        cameraService.start()
+        cameraService.setSampleBufferDelegate(delegate: videoOutputActive ? nil : ocr, queue: videoOutputQueue)
     }
     
     func stopSession() {

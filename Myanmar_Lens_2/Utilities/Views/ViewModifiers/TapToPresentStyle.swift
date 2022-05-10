@@ -15,7 +15,7 @@ struct TapToPresentStyle<Destination: View>: ViewModifier {
     
     let destination: Destination
     let modelType: ModelType
-    
+    let onDismiss: (() -> Void)?
     @State private var isSheet = false
     @State private var isFullScreen = false
     
@@ -31,10 +31,11 @@ struct TapToPresentStyle<Destination: View>: ViewModifier {
         } label: {
             content
         }
-        .fullScreenCover(isPresented: $isFullScreen) {
+        .fullScreenCover(isPresented: $isFullScreen, onDismiss: onDismiss) {
             destination
         }
-        .sheet(isPresented: $isSheet) {
+    
+        .sheet(isPresented: $isSheet, onDismiss: onDismiss) {
             destination
         }
     }
@@ -42,7 +43,7 @@ struct TapToPresentStyle<Destination: View>: ViewModifier {
 
 
 extension View {
-    func tapToPresent<Destination: View>(_ view: Destination, _ modelType: ModelType = .Sheet) -> some View {
-        ModifiedContent(content: self, modifier: TapToPresentStyle(destination: view, modelType: modelType))
+    func tapToPresent<Destination: View>(_ view: Destination, _ modelType: ModelType = .Sheet, onDismiss: (()->Void)? = nil) -> some View {
+        ModifiedContent(content: self, modifier: TapToPresentStyle(destination: view, modelType: modelType, onDismiss: onDismiss))
     }
 }

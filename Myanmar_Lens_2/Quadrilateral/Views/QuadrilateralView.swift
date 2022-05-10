@@ -11,13 +11,6 @@ import AVFoundation
 
 final class QuadrilateralView: UIView {
     
-    private let quadLayer: CAShapeLayer = {
-        $0.fillColor = nil
-//        $0.lineWidth = 3
-//        $0.strokeColor = UIColor.tintColor.cgColor
-        return $0
-    }(CAShapeLayer())
-    
     private let quadLineLayer: CAShapeLayer = {
         $0.fillColor = nil
         $0.lineWidth = 0
@@ -64,7 +57,6 @@ final class QuadrilateralView: UIView {
         addSubview(topRightCornerView)
         addSubview(bottomRightCornerView)
         addSubview(bottomLeftCornerView)
-        layer.addSublayer(quadLayer)
         layer.addSublayer(quadLineLayer)
         cornerViews(hidden: true)
     }
@@ -78,7 +70,6 @@ final class QuadrilateralView: UIView {
             let rect = bounds
             drawQuadrilateral(quad: .init(rect))
         }
-        quadLayer.frame = viewQuad.regionRect
     }
 
     func getQuadFrame() -> CGRect {
@@ -92,20 +83,13 @@ final class QuadrilateralView: UIView {
         let pathAnimation = CABasicAnimation(keyPath: "path")
         pathAnimation.duration = 0.4
         quadLineLayer.add(pathAnimation, forKey: "path")
-        quadLayer.frame = viewQuad.regionRect
     }
 }
 
 // Input
 
 extension QuadrilateralView {
-    
-    func display(textQuads: [TextQuad]) {
-        quadLayer.sublayers?.forEach{ $0.removeFromSuperlayer() }
-        textQuads.forEach{ $0.displayShapeLayer(in: quadLayer)}
-        textQuads.forEach{ $0.displayTextLayer(in: quadLayer )}
-    }
-    
+
     func drawQuadrilateral(quad: Quadrilateral) {
         self.viewQuad = quad
         draw(quad, animated: !isHighlighted)

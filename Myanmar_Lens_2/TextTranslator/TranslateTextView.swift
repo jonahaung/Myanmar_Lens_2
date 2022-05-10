@@ -11,9 +11,8 @@ class TranslateTextView: UITextView {
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        backgroundColor = .clear
         showsVerticalScrollIndicator = false
-        dataDetectorTypes = []
+        dataDetectorTypes = .all
         keyboardDismissMode = .onDrag
         bounces = false
         isSelectable = true
@@ -22,7 +21,12 @@ class TranslateTextView: UITextView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    func scrollToBottom() {
+        let length = attributedText.string.utf16.count
+        let range = NSMakeRange(length-1, 0)
+        scrollRangeToVisible(range)
+        selectedTextRange = self.textRange(from: endOfDocument, to: endOfDocument)
+    }
     
 }
 
@@ -40,11 +44,17 @@ extension TranslateTextView {
             view.isScrollEnabled = isScrollEnabled
             view.delegate = context.coordinator
             view.font = UIFont(name: XFont.MyanmarFont.MyanmarSansPro.rawValue, size: isEditable ? UIFont.buttonFontSize : 25)
+            
             return view
         }
         
         func updateUIView(_ uiView: TranslateTextView, context: Context) {
-            uiView.text = text
+            if isEditable && text.isEmpty && !uiView.isFirstResponder {
+                uiView.becomeFirstResponder()
+            } else {
+                uiView.text = text
+                uiView.scrollToBottom()
+            }
         }
         
         func makeCoordinator() -> Coordinator {
@@ -62,7 +72,7 @@ extension TranslateTextView {
                 text.wrappedValue = textView.text
             }
             func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-                if text == "\n" {
+                if text == "\n" && !textView.hasText {
                     textView.resignFirstResponder()
                     return false
                 }

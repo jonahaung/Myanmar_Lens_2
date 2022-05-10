@@ -12,7 +12,7 @@ class PersistenceController {
     static var shared = PersistenceController()
     private let container: NSPersistentContainer
 
-    lazy var viewContext: NSManagedObjectContext = container.newBackgroundContext()
+    lazy var viewContext: NSManagedObjectContext = container.viewContext
     
     private init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Myanmar_Lens_2")

@@ -86,7 +86,7 @@ struct CameraOCRViewController: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                    .tapToPresent(ImageOCRViewController(image: image).onAppear(perform: onAppearOCRImage).onDisappear(perform: onDisappearOCRImage), .FullScreen)
+                    .tapToPresent(ImageOCRViewController(image: image), .FullScreen)
             } else {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 10)
@@ -95,7 +95,7 @@ struct CameraOCRViewController: View {
                     
                     if viewModel.videoOutputActive {
                         Picker("OCR Type", selection: $viewModel.liveOcrType) {
-                            ForEach(CameraOCRViewModel.LiveOcrType.allCases) {
+                            ForEach(CameraOCR.LiveOcrType.allCases) {
                                 Text($0.rawValue)
                                     .tag($0)
                             }
@@ -105,7 +105,7 @@ struct CameraOCRViewController: View {
                     } else {
                         XIcon(.photo_on_rectangle)
                             .transition(.offset(x: -100))
-                            .tapToPresent(SystemImagePicker(item: $viewModel.capturedImage))
+                            .tapToPresent(SystemImagePicker(item: $viewModel.pickedItem))
                     }
                 }
             }
@@ -149,14 +149,6 @@ struct CameraOCRViewController: View {
         }
     }
     
-    private func onAppearOCRImage() {
-        viewModel.stopSession()
-        
-    }
-    private func onDisappearOCRImage() {
-        viewModel.startSession()
-        viewModel.capturedImage = nil
-    }
     private func dragGesture(reader: GeometryProxy) -> some Gesture {
         DragGesture().onChanged({ (val) in
             if abs(val.translation.height) > abs(val.translation.width) {

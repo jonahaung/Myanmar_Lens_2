@@ -45,6 +45,7 @@ final class ImageOCR {
         
         
         let textQuads = results.map{ TextQuad($0, affineTransform )}
+        textQuads.forEach{ $0.isStable = true }
         
         let imageViewSize = view.imageView.frame.size
         textQuads.forEach{ $0.cropImage(originalImage: image, imageViewSize: imageViewSize)}
@@ -90,7 +91,7 @@ final class ImageOCR {
         return await withTaskGroup(of: Void.self) { group in
             for each in textQuads {
                 group.addTask {
-                    await each.recognizeText()
+                    await each.recognizeMyanmarTexts()
                 }
             }
         }

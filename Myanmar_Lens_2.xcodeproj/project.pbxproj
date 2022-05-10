@@ -76,7 +76,15 @@
 		478DA3A228215CFA00ED09AE /* UIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA3A128215CFA00ED09AE /* UIUtilities.swift */; };
 		478DA3A52823C1DE00ED09AE /* MyTextClassifier .mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 478DA3A42823C1DE00ED09AE /* MyTextClassifier .mlmodel */; };
 		478DA3A72823C23600ED09AE /* SentimentAnalysier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478DA3A62823C23600ED09AE /* SentimentAnalysier.swift */; };
+		47C2FFF628297BD9007416F1 /* HomeMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2FFF528297BD9007416F1 /* HomeMenuBar.swift */; };
 		47C667A22820931600AD427C /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C667A12820931600AD427C /* UIImageColors.swift */; };
+		47F4799A2829FAAA008DEAEA /* XPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F479952829FAAA008DEAEA /* XPicker.swift */; };
+		47F4799B2829FAAA008DEAEA /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F479962829FAAA008DEAEA /* DocumentPicker.swift */; };
+		47F4799E2829FAAA008DEAEA /* DocumentScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F479992829FAAA008DEAEA /* DocumentScanner.swift */; };
+		47F479A02829FAF6008DEAEA /* PickedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F4799F2829FAF6008DEAEA /* PickedItem.swift */; };
+		47F479A2282A599E008DEAEA /* PickedItemHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F479A1282A599E008DEAEA /* PickedItemHostView.swift */; };
+		47F479A5282A5C03008DEAEA /* DocTranslatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F479A4282A5C03008DEAEA /* DocTranslatorViewController.swift */; };
+		47F479A8282A62B9008DEAEA /* MySpellCorrect in Frameworks */ = {isa = PBXBuildFile; productRef = 47F479A7282A62B9008DEAEA /* MySpellCorrect */; };
 		CF8ACDBA0E43C1A5F4B8B1DA /* Pods_Myanmar_Lens_2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 516DF5237AF99E81F5E76A73 /* Pods_Myanmar_Lens_2.framework */; };
 /* End PBXBuildFile section */
 
@@ -151,7 +159,14 @@
 		478DA3A128215CFA00ED09AE /* UIUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtilities.swift; sourceTree = "<group>"; };
 		478DA3A42823C1DE00ED09AE /* MyTextClassifier .mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "MyTextClassifier .mlmodel"; sourceTree = "<group>"; };
 		478DA3A62823C23600ED09AE /* SentimentAnalysier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentimentAnalysier.swift; sourceTree = "<group>"; };
+		47C2FFF528297BD9007416F1 /* HomeMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuBar.swift; sourceTree = "<group>"; };
 		47C667A12820931600AD427C /* UIImageColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageColors.swift; sourceTree = "<group>"; };
+		47F479952829FAAA008DEAEA /* XPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XPicker.swift; sourceTree = "<group>"; };
+		47F479962829FAAA008DEAEA /* DocumentPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		47F479992829FAAA008DEAEA /* DocumentScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentScanner.swift; sourceTree = "<group>"; };
+		47F4799F2829FAF6008DEAEA /* PickedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedItem.swift; sourceTree = "<group>"; };
+		47F479A1282A599E008DEAEA /* PickedItemHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedItemHostView.swift; sourceTree = "<group>"; };
+		47F479A4282A5C03008DEAEA /* DocTranslatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocTranslatorViewController.swift; sourceTree = "<group>"; };
 		516DF5237AF99E81F5E76A73 /* Pods_Myanmar_Lens_2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Myanmar_Lens_2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C6D3525963091A140B7DC15 /* Pods-Myanmar_Lens_2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Myanmar_Lens_2.debug.xcconfig"; path = "Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2.debug.xcconfig"; sourceTree = "<group>"; };
 		E8003E07CC69A9C76D5E5098 /* Pods-Myanmar_Lens_2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Myanmar_Lens_2.release.xcconfig"; path = "Target Support Files/Pods-Myanmar_Lens_2/Pods-Myanmar_Lens_2.release.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +177,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47F479A8282A62B9008DEAEA /* MySpellCorrect in Frameworks */,
 				474782AA2816379400B3B6C4 /* Translator in Frameworks */,
 				CF8ACDBA0E43C1A5F4B8B1DA /* Pods_Myanmar_Lens_2.framework in Frameworks */,
 			);
@@ -192,6 +208,7 @@
 		474782912816365F00B3B6C4 /* Myanmar_Lens_2 */ = {
 			isa = PBXGroup;
 			children = (
+				47F479A3282A5BEB008DEAEA /* DocTranslator */,
 				478DA3A32823C1B000ED09AE /* SentimentAnalysis */,
 				478DA3982821437F00ED09AE /* Settings */,
 				478DA3972821437600ED09AE /* History */,
@@ -248,6 +265,7 @@
 		474782AE281637E600B3B6C4 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				47F479942829FAAA008DEAEA /* Pickers */,
 				478AFD852817DAD200A6EBEE /* XTranslator.swift */,
 				474782AF281637F300B3B6C4 /* XFont.swift */,
 				474782B12816382D00B3B6C4 /* XIcon.swift */,
@@ -425,6 +443,8 @@
 			isa = PBXGroup;
 			children = (
 				474782942816365F00B3B6C4 /* HomeView.swift */,
+				47C2FFF528297BD9007416F1 /* HomeMenuBar.swift */,
+				47F479A1282A599E008DEAEA /* PickedItemHostView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -465,6 +485,25 @@
 			path = SentimentAnalysis;
 			sourceTree = "<group>";
 		};
+		47F479942829FAAA008DEAEA /* Pickers */ = {
+			isa = PBXGroup;
+			children = (
+				47F479952829FAAA008DEAEA /* XPicker.swift */,
+				47F479962829FAAA008DEAEA /* DocumentPicker.swift */,
+				47F479992829FAAA008DEAEA /* DocumentScanner.swift */,
+				47F4799F2829FAF6008DEAEA /* PickedItem.swift */,
+			);
+			path = Pickers;
+			sourceTree = "<group>";
+		};
+		47F479A3282A5BEB008DEAEA /* DocTranslator */ = {
+			isa = PBXGroup;
+			children = (
+				47F479A4282A5C03008DEAEA /* DocTranslatorViewController.swift */,
+			);
+			path = DocTranslator;
+			sourceTree = "<group>";
+		};
 		77D33FEAE5FA446BD6387595 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -503,6 +542,7 @@
 			name = Myanmar_Lens_2;
 			packageProductDependencies = (
 				474782A92816379400B3B6C4 /* Translator */,
+				47F479A7282A62B9008DEAEA /* MySpellCorrect */,
 			);
 			productName = Myanmar_Lens_2;
 			productReference = 4747828F2816365F00B3B6C4 /* Myanmar_Lens_2.app */;
@@ -534,6 +574,7 @@
 			mainGroup = 474782862816365F00B3B6C4;
 			packageReferences = (
 				474782A82816379400B3B6C4 /* XCRemoteSwiftPackageReference "Translator" */,
+				47F479A6282A62B9008DEAEA /* XCRemoteSwiftPackageReference "MySpellCorrect" */,
 			);
 			productRefGroup = 474782902816365F00B3B6C4 /* Products */;
 			projectDirPath = "";
@@ -623,11 +664,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				471AA5CC281707AE005F2582 /* ImageOCRView.swift in Sources */,
+				47F479A5282A5C03008DEAEA /* DocTranslatorViewController.swift in Sources */,
 				478DA3A52823C1DE00ED09AE /* MyTextClassifier .mlmodel in Sources */,
 				474782E528163DD400B3B6C4 /* TapToShowComfirmationDialog.swift in Sources */,
 				478AFD862817DAD200A6EBEE /* XTranslator.swift in Sources */,
+				47F4799B2829FAAA008DEAEA /* DocumentPicker.swift in Sources */,
 				471AA5D028170807005F2582 /* ImageFilterer.swift in Sources */,
 				4747829C2816366100B3B6C4 /* Persistence.swift in Sources */,
+				47F4799E2829FAAA008DEAEA /* DocumentScanner.swift in Sources */,
+				47F479A02829FAF6008DEAEA /* PickedItem.swift in Sources */,
 				478DA3A228215CFA00ED09AE /* UIUtilities.swift in Sources */,
 				474782D028163C1B00B3B6C4 /* EditScanCornerView.swift in Sources */,
 				474782D828163C6C00B3B6C4 /* UIImage+Utils.swift in Sources */,
@@ -643,6 +688,8 @@
 				478DA39A2821438E00ED09AE /* HistoryView.swift in Sources */,
 				474782D928163C6C00B3B6C4 /* CGImagePropertyOrientation.swift in Sources */,
 				474782CC28163BFF00B3B6C4 /* Quadrilateral.swift in Sources */,
+				47F4799A2829FAAA008DEAEA /* XPicker.swift in Sources */,
+				47C2FFF628297BD9007416F1 /* HomeMenuBar.swift in Sources */,
 				4773BB422818C8D300BEF2F7 /* XCache.swift in Sources */,
 				473B1C3D2818B9E400D5A7B5 /* ImagePicker.swift in Sources */,
 				474782FF281643C800B3B6C4 /* AlertError.swift in Sources */,
@@ -664,6 +711,7 @@
 				476B1AAE28183BE1008537A9 /* CameraFrameService.swift in Sources */,
 				474782FD281643C800B3B6C4 /* PhotoCaptureProcessor.swift in Sources */,
 				474782CB28163BFF00B3B6C4 /* Transformable.swift in Sources */,
+				47F479A2282A599E008DEAEA /* PickedItemHostView.swift in Sources */,
 				474782D728163C6C00B3B6C4 /* CGPoint+Utils.swift in Sources */,
 				474782E628163DD400B3B6C4 /* TapToPresentStyle.swift in Sources */,
 				478DA38B2820F1F300ED09AE /* MyanmarTextRecognizer.swift in Sources */,
@@ -905,6 +953,14 @@
 				kind = branch;
 			};
 		};
+		47F479A6282A62B9008DEAEA /* XCRemoteSwiftPackageReference "MySpellCorrect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jonahaung/MySpellCorrect";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -912,6 +968,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 474782A82816379400B3B6C4 /* XCRemoteSwiftPackageReference "Translator" */;
 			productName = Translator;
+		};
+		47F479A7282A62B9008DEAEA /* MySpellCorrect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47F479A6282A62B9008DEAEA /* XCRemoteSwiftPackageReference "MySpellCorrect" */;
+			productName = MySpellCorrect;
 		};
 /* End XCSwiftPackageProductDependency section */
 

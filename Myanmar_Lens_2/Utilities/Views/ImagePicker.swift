@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SystemImagePicker: UIViewControllerRepresentable {
     
-    @Binding var item: UIImage?
+    @Binding var item: PickedItem?
     
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration()
@@ -55,7 +55,7 @@ struct SystemImagePicker: UIViewControllerRepresentable {
                         return
                     }
                     
-                    self.parent.item = filtered
+                    self.parent.item = .Image(filtered)
                     picker.dismiss(animated: true)
                 }
             }
@@ -63,8 +63,3 @@ struct SystemImagePicker: UIViewControllerRepresentable {
     }
 }
 
-enum PickedItem {
-    case Text(String)
-    case Image(UIImage)
-    case None
-}

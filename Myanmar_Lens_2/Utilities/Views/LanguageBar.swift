@@ -15,29 +15,32 @@ struct LanguageBar: View {
     
     var body: some View {
         HStack {
-            Menu {
+            Spacer()
+            Picker(selection: $soruceLanguage) {
                 ForEach(NLLanguage.sourceLanguages, id: \.self) { language in
-                    Button(language.localized, role: .none) {
-                        self.soruceLanguage = language.rawValue
-                    }
+                    Text(language.localized)
+                        .tag(language.rawValue)
                 }
             } label: {
                 Text(NLLanguage(rawValue: soruceLanguage).localized)
             }
+            .labelsHidden()
             XIcon(.chevron_right)
                 .foregroundColor(.gray)
                 .imageScale(.small)
                 .font(.body)
-            Menu {
+            
+            Picker(selection: $targetLanguage) {
                 ForEach(NLLanguage.targetLanguages, id: \.self) { language in
-                    Button(language.localized, role: .none) {
-                        self.targetLanguage = language.rawValue
-                    }
+                    Text(language.localized)
+                        .tag(language.rawValue)
                 }
             } label: {
                 Text(NLLanguage(rawValue: targetLanguage).localized)
+                
             }
-
+            .labelsHidden()
+            Spacer()
         }
     }
 }

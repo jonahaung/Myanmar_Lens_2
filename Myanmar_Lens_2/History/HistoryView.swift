@@ -12,22 +12,30 @@ struct HistoryView: View {
     @StateObject private var viewModel = HistoryViewModel()
     
     var body: some View {
-        NavigationView {
-            List {
-                Section {
-                    ForEach(viewModel.items) { item in
-                        TranslateCell()
-                            .environmentObject(item)
-                    }
+        List {
+            Section {
+                ForEach(viewModel.items) { item in
+                    TranslateCell()
+                        .environmentObject(item)
                 }
             }
-            .refreshable {
+        }
+        .refreshable {
+            viewModel.task()
+        }
+        .task {
+            viewModel.task()
+        }
+        .navigationTitle("History")
+        .navigationBarItems(trailing: trailingItems)
+    }
+    
+    private var trailingItems: some View {
+        HStack {
+            Button("Clear All") {
+                Translate.deleteAll()
                 viewModel.task()
             }
-            .task {
-                viewModel.task()
-            }
-            .navigationTitle("History")
         }
     }
 }

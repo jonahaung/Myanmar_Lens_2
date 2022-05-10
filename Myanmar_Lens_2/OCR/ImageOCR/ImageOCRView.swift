@@ -117,6 +117,7 @@ extension ImageOCRView {
     }
     
     func display(textQuads: [TextQuad]) {
+        shapeLayer.sublayers?.forEach{ $0.removeFromSuperlayer() }
         textQuads.forEach{ $0.displayShapeLayer(in: shapeLayer)}
         textQuads.forEach{ $0.displayTextLayer(in: shapeLayer)}
     }

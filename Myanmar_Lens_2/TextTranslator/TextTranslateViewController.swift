@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NaturalLanguage
 
 struct TextTranslateViewController: View {
     
@@ -13,60 +14,50 @@ struct TextTranslateViewController: View {
     @EnvironmentObject private var xDefaults: XDefaults
     
     var body: some View {
-        GeometryReader { geo in
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    Divider()
+        PickerNavigationView {
+            VStack(spacing: 0) {
+                Divider()
+                TranslateTextView.SwiftUIView(text: $viewModel.translated, isEditable: false, isScrollEnabled: true)
+                    .frame(maxHeight: .infinity)
         
-                    TranslateTextView.SwiftUIView(text: $viewModel.translated, isEditable: false, isScrollEnabled: true)
-                        .frame(minHeight: geo.size.height/3)
-                        .padding(5)
-                        .overlay(outputTextViewOverlay())
-                
-                    Divider()
-                    
-                    Text(viewModel.sentiment)
-                        .foregroundColor(.blue)
-                        .font(.custom(XFont.MyanmarFont.MyanmarSansPro.rawValue, size: 20))
-                    
-                    TranslateTextView.SwiftUIView(text: $viewModel.text, isEditable: true, isScrollEnabled: true)
-                        .frame(height: geo.size.height/3)
-                        .padding(5)
-                    
-                    Divider()
-                    menuBar()
-                }
+                Divider()
+
+                TranslateTextView.SwiftUIView(text: $viewModel.text, isEditable: true, isScrollEnabled: true)
+                    .frame(maxHeight: .infinity)
+                sourceTextViewBar
             }
-            .navigationBarItems(leading:  LanguageBar().font(.callout))
+            .padding(.horizontal)
+            .frame(maxHeight: .infinity)
+            .navigationBarItems(trailing: LanguageBar())
         }
+
     }
     
-    private func menuBar() -> some View {
+    private var sourceTextViewBar: some View {
         HStack {
-            XIcon(.camera_viewfinder)
-                .tapToPresent(CameraOCRViewController(), .FullScreen)
-            XIcon(.doc_append)
-            XIcon(.photo_on_rectangle)
-        }
-        .padding()
-        .imageScale(.large)
-    }
-    private func outputTextViewOverlay() -> some View {
-        Group {
-            if viewModel.translated.isEmpty {
-                Text(xDefaults.targetLanguage.localized)
-                    .font(.system(size: 30, weight: .black, design: .rounded))
-                    .foregroundStyle(.tertiary)
+            
+            if viewModel.text.isWhitespace == false {
+                Text(viewModel.detectedLanguage.localized)
+                    .italic()
+                    .foregroundColor(.secondary)
             }
-        }
-    }
-    private func inputTextViewOverlay() -> some View {
-        Group {
-            if viewModel.text.isEmpty {
-                Text(xDefaults.soruceLanguage.localized)
-                    .font(.system(size: 30, weight: .black, design: .rounded))
-                    .foregroundStyle(.tertiary)
+            Spacer()
+            Button("Copy") {
+                UIPasteboard.general.string = viewModel.translated
             }
-        }
+            .disabled(viewModel.translated.isWhitespace)
+            
+            Button(action: {
+                XTranslator.shared.save(text: viewModel.text, sourceLanguage: xDefaults.targetLanguage, target: viewModel.translated, targetLanguage: xDefaults.targetLanguage)
+            }, label: {
+                Text("Save")
+            })
+            .disabled(viewModel.translated.isWhitespace || viewModel.text.isWhitespace)
+        
+            Button("Clear") {
+                viewModel.text = String()
+                viewModel.translated = String()
+            }.disabled(viewModel.text.isWhitespace)
+        }.padding(5)
     }
 }

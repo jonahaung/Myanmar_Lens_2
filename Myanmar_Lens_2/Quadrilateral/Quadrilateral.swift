@@ -65,7 +65,8 @@ extension Quadrilateral {
         return CGRect(origin: origin, size: size)
     }
     var fittedRect: CGRect {
-        CGRect(origin: topLeft, size: CGSize(width: topRight.x - topLeft.x, height: topLeft.y - bottomLeft.y))
+        let rect = CGRect(origin: topLeft, size: CGSize(width: topRight.x - topLeft.x, height: topLeft.y - bottomLeft.y))
+        return rect.isValid() ? rect : regionRect
     }
 }
 

@@ -14,7 +14,7 @@ class ShapeLayer: CAShapeLayer {
     }
     init(quad: Quadrilateral) {
         super.init()
-        fillColor = UIColor.systemGray3.cgColor
+        fillColor = UIColor(white: 0.2, alpha: 0.9).cgColor
         path = quad.path.cgPath
     }
     

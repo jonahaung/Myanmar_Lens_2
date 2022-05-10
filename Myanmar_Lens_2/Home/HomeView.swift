@@ -9,18 +9,26 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        NavigationView {
-            TextTranslateViewController()
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationBarItems(trailing: navBarTrailing())
+        VStack {
+            
         }
-        .navigationViewStyle(.stack)
+        .overlay(HomeMenuBar(), alignment: .bottom)
+        .navigationTitle("Myanmar Lens")
+        .navigationBarItems(leading: navBarLeading(), trailing: navBarTrailing())
     }
     
     func navBarTrailing() -> some View {
         HStack {
-            XIcon(.camera_fill)
-                .tapToPresent(CameraOCRViewController(), .FullScreen)
+            XIcon(.heart_fill)
+                .foregroundColor(.pink)
+                .tapToPush(HistoryView())
+        }
+    }
+    func navBarLeading() -> some View {
+        HStack {
+            XIcon(.scribble)
+                .tapToPush(SettingsView())
+            
         }
     }
 }

@@ -14,6 +14,7 @@ class CameraOCRPreviewView: UIView {
     override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
     private var panGesture: UILongPressGestureRecognizer?
     var previewLayer: AVCaptureVideoPreviewLayer { layer as! AVCaptureVideoPreviewLayer }
+    
     let quadView: QuadrilateralView = {
         $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return $0
@@ -23,6 +24,10 @@ class CameraOCRPreviewView: UIView {
         $0.contentMode = .scaleAspectFill
         return $0
     }(UIImageView())
+    private let textDisplayLayer: CAShapeLayer = {
+        $0.fillColor = UIColor(white: 0.3, alpha: 0.6).cgColor
+        return $0
+    }(CAShapeLayer())
     
     var captureSession: AVCaptureSession? {
         didSet {
@@ -40,6 +45,7 @@ class CameraOCRPreviewView: UIView {
         backgroundColor = .black
         quadView.frame = bounds
         addSubview(imageView)
+        imageView.layer.addSublayer(textDisplayLayer)
         addSubview(quadView)
         setupGestureRecognizer()
     }
@@ -54,7 +60,8 @@ class CameraOCRPreviewView: UIView {
         let layerRectScaleTransform = CGAffineTransform(scaleX: layerRect.width, y: -layerRect.height)
         let layerRectTranslateTransform = CGAffineTransform(translationX: layerRect.minX, y: layerRect.maxY)
         regionOfInterestTransform = layerRectScaleTransform.concatenating(layerRectTranslateTransform)
-        imageView.frame = previewLayer.bounds
+        imageView.frame = self.bounds
+        textDisplayLayer.frame = quadView.getQuadFrame()
     }
     
     var regionOfInterest: CGRect {
@@ -101,20 +108,19 @@ extension CameraOCRPreviewView: UIGestureRecognizerDelegate {
             previousPanPosition = nil
             closestCorner = nil
             quadView.resetHighlightedCornerViews()
-            
+            setNeedsLayout()
         default:
             break
         }
     }
     
-    func setActive(isActive: Bool) {
-        
+    func set(_ isActive: Bool, liveOcrType: CameraOCR.LiveOcrType) {
         previewLayer.videoGravity = isActive ? .resizeAspectFill : .resizeAspect
+        quadView.setActive(isActive: isActive && liveOcrType == .Apple) // TO DO 
         self.isActive = isActive
         imageView.isHidden = !isActive
         setNeedsLayout()
-        quadView.display(textQuads: [])
-        
+        display(textQuads: [])
     }
     
     func getQuadFrame() -> CGRect {
@@ -132,9 +138,17 @@ extension CameraOCRPreviewView {
     }
     
     func display(textQuads: [TextQuad]) {
-        let color = imageView.colorOfPoint(point: CGPoint(x: imageView.frame.midX, y: imageView.frame.midY))
-        textQuads.forEach{ $0.updateBackgroundColor(color: color )}
-        quadView.display(textQuads: textQuads)
+        if isActive {
+            textDisplayLayer.sublayers?.forEach{ $0.removeFromSuperlayer() }
+            
+            let bizerPath = UIBezierPath()
+            textQuads.forEach { each in
+                bizerPath.append(each.quad.path)
+            }
+            textDisplayLayer.path = bizerPath.cgPath
+            
+            textQuads.forEach{ $0.displayTextLayer(in: textDisplayLayer )}
+        }
     }
 }
 

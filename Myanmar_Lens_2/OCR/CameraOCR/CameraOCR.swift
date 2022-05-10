@@ -9,19 +9,25 @@ import UIKit
 import Vision
 import MLKit
 import MLImage
+import AVFoundation
 
-class CameraOCR {
+class CameraOCR: NSObject {
+    
+    enum LiveOcrType: String, Identifiable, Hashable, CaseIterable {
+        var id: String { rawValue }
+        case Google, Apple
+    }
     
     private let stringTracker = StringTracker()
     private let translateOperationGroup = TranslateOperationGroup()
     private let textRequest: VNRecognizeTextRequest
-    
+    private var liveOcrType: LiveOcrType = .Apple
     weak var view: CameraOCRPreviewView?
     @Published var progress = CGFloat.zero
     @Published var alertError: AlertError?
     private var lastFrame: CVImageBuffer?
     
-    init() {
+    override init() {
         textRequest = VNRecognizeTextRequest()
         textRequest.recognitionLevel = .accurate
         textRequest.usesLanguageCorrection = false
@@ -29,9 +35,10 @@ class CameraOCR {
 }
 
 extension CameraOCR {
-    func set(_ isActive: Bool) {
+    func set(_ isActive: Bool, liveOcrType: LiveOcrType) {
+        view?.set(isActive, liveOcrType: liveOcrType)
+        self.liveOcrType = liveOcrType
         progress = 0
-        view?.setActive(isActive: isActive)
         stringTracker.reset()
         
     }
@@ -46,8 +53,11 @@ extension CameraOCR {
             translateOperationGroup.addIfNeeded(stableString)
         }
         let stableResults = textQuads.filter { result in
-            return stringTracker.isCachedStable(result.string)
+            let isStable = stringTracker.isCachedStable(result.string)
+            result.isStable = isStable
+            return isStable
         }
+        
         self.progress = CGFloat(stableResults.count) / CGFloat(textQuads.count)
         self.view?.display(textQuads: textQuads)
         
@@ -60,74 +70,9 @@ extension CameraOCR {
         }
     }
 }
-//Vision
-extension CameraOCR {
-    func detectText(buffer: CMSampleBuffer) {
-        if let imageBuffer = buffer.imageBuffer, let regionOfInterest = view?.regionOfInterest {
-            lastFrame = imageBuffer
-            textRequest.regionOfInterest = regionOfInterest
-            let handler = VNImageRequestHandler(cvPixelBuffer: imageBuffer, orientation: .init(UIUtilities.imageOrientation()), options: [:])
-            do {
-                try handler.perform([textRequest])
-            } catch {
-                self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
-                return
-            }
-            updatePreviewOverlayViewWithLastFrame()
-            guard var results = textRequest.results else { return }
-            results = results.filter{ $0.confidence >= 0.4 }
-            
-            if results.isEmpty {
-                textRequest.cancel()
-            }
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                if let affineTransform = self.view?.textsAffineTransform() {
-                    let textQuads = results.map{ TextQuad($0, affineTransform )}
-                    self.handleTextQuads(textQuads)
-                }
-            }
-        }
-    }
-}
+
 // Google
 extension CameraOCR {
-    
-    func detectGoogle(buffer: CMSampleBuffer) {
-        guard let imageBuffer = buffer.imageBuffer else { return }
-        lastFrame = imageBuffer
-        let visionImage = VisionImage(buffer: buffer)
-        let orientation = UIUtilities.imageOrientation(fromDevicePosition: .back)
-        visionImage.orientation = orientation
-        let imageWidth = CGFloat(CVPixelBufferGetWidth(imageBuffer))
-        let imageHeight = CGFloat(CVPixelBufferGetHeight(imageBuffer))
-        
-        let recognizedText: Text
-        do {
-            recognizedText = try TextRecognizer.textRecognizer(options: TextRecognizerOptions.init()).results(in: visionImage)
-        } catch {
-            self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
-            return
-        }
-        updatePreviewOverlayViewWithLastFrame()
-        
-        DispatchQueue.main.sync { [weak self] in
-            guard let self = self else { return }
-            var textQuads = [TextQuad]()
-            for block in recognizedText.blocks {
-                for line in block.lines {
-                    if let points = self.convertedPoints(from: line.cornerPoints, width: imageWidth, height: imageHeight) {
-                        var quad = Quadrilateral(points)
-                        quad.reorganize()
-                        let textQuad = TextQuad(quad, line.text)
-                        textQuads.append(textQuad)
-                    }
-                }
-            }
-            handleTextQuads(textQuads)
-        }
-    }
     
     private func convertedPoints(from points: [NSValue]?, width: CGFloat, height: CGFloat) -> [CGPoint]? {
         return points?.map {
@@ -135,5 +80,72 @@ extension CameraOCR {
             let normalizedPoint = CGPoint(x: cgPointValue.x / width, y: cgPointValue.y / height)
             return view?.previewLayer.layerPointConverted(fromCaptureDevicePoint: normalizedPoint) ?? .zero
         }
+    }
+}
+
+
+extension CameraOCR: AVCaptureVideoDataOutputSampleBufferDelegate {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = sampleBuffer.imageBuffer else { return }
+        lastFrame = imageBuffer
+        if liveOcrType == .Apple {
+            if let regionOfInterest = view?.regionOfInterest {
+                textRequest.regionOfInterest = regionOfInterest
+                let handler = VNImageRequestHandler(cvPixelBuffer: imageBuffer, orientation: .init(UIUtilities.imageOrientation()), options: [:])
+                do {
+                    try handler.perform([textRequest])
+                } catch {
+                    self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
+                    return
+                }
+                
+                guard var results = textRequest.results else { return }
+                results = results.filter{ $0.confidence >= 0.4 }
+                updatePreviewOverlayViewWithLastFrame()
+                if results.isEmpty {
+                    textRequest.cancel()
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    if let affineTransform = self.view?.textsAffineTransform() {
+                        let textQuads = results.map{ TextQuad($0, affineTransform )}
+                        self.handleTextQuads(textQuads)
+                    }
+                }
+            }
+        } else {
+            let visionImage = VisionImage(buffer: sampleBuffer)
+            let orientation = UIUtilities.imageOrientation(fromDevicePosition: .back)
+            visionImage.orientation = orientation
+            let imageWidth = CGFloat(CVPixelBufferGetWidth(imageBuffer))
+            let imageHeight = CGFloat(CVPixelBufferGetHeight(imageBuffer))
+            
+            let recognizedText: Text
+            do {
+                recognizedText = try TextRecognizer.textRecognizer(options: TextRecognizerOptions.init()).results(in: visionImage)
+            } catch {
+                self.alertError = AlertError(title: "OCR Error", message: error.localizedDescription, primaryButtonTitle: "OK")
+                return
+            }
+            updatePreviewOverlayViewWithLastFrame()
+            
+            DispatchQueue.main.sync { [weak self] in
+                guard let self = self else { return }
+                var textQuads = [TextQuad]()
+                for block in recognizedText.blocks {
+                    for line in block.lines {
+                        if let points = self.convertedPoints(from: line.cornerPoints, width: imageWidth, height: imageHeight) {
+                            var quad = Quadrilateral(points)
+                            quad.reorganize()
+                            let textQuad = TextQuad(quad, line.text)
+                            textQuads.append(textQuad)
+                        }
+                    }
+                }
+                handleTextQuads(textQuads)
+            }
+        }
+        
     }
 }
